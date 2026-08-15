@@ -80,11 +80,10 @@
                     </button>
                 </div>
 
-                <!-- Banner Image -->
+                <!-- Safe Dynamic Banner -->
                 <div class="w-full max-h-56 sm:max-h-64 rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-lg bg-slate-900 flex justify-center items-center">
                     <img id="display-quiz-banner" 
-                         src="https://i.ibb.co/6R5Lz65b/image.jpg" 
-                         onerror="this.src='https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop'"
+                         src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" 
                          alt="واجهة الاختبار" 
                          class="w-full h-full object-cover">
                 </div>
@@ -289,9 +288,9 @@
                         
                         <!-- Banner Image Control with Live Preview -->
                         <div class="sm:col-span-2 space-y-2">
-                            <label class="block text-xs font-bold text-purple-200">رابط صورة واجهة الاختبار</label>
+                            <label class="block text-xs font-bold text-purple-200">رابط صورة واجهة الاختبار (يمكن وضع أي رابط مباشر)</label>
                             <div class="flex gap-2">
-                                <input type="text" id="admin-input-banner" oninput="previewBannerInput(this.value)" placeholder="ضع رابط الصورة هنا" class="flex-1 bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                                <input type="text" id="admin-input-banner" oninput="previewBannerInput(this.value)" placeholder="https://..." class="flex-1 bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
                             </div>
                             <div class="w-full h-32 rounded-xl bg-slate-900 border border-purple-500/30 overflow-hidden flex items-center justify-center p-1">
                                 <img id="admin-banner-preview" src="" alt="معاينة الصورة" class="max-h-full object-contain">
@@ -552,30 +551,34 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
-        // REAL HIGH QUALITY AUDIO TRACKS (تصفيق بشري حقيقي وتشجيع جماعي + صوت الترومبون الحزين للإحباط)
+        // GOOGLE ACTIONS OFFICIAL HIGH-QUALITY AUDIO CDN (Pure, Clear, No Noise)
         const AUDIO_BANK = {
-            click: new Audio("https://cdn.freesound.org/previews/256/256113_3263906-lq.mp3"),
-            correct: new Audio("https://cdn.freesound.org/previews/277/277021_4939433-lq.mp3"), // Real Clapping & Cheering
-            wrong: new Audio("https://cdn.freesound.org/previews/175/175409_3234914-lq.mp3"),   // Real Sad Trombone Wah-Wah Fail
-            fanfare: new Audio("https://cdn.freesound.org/previews/277/277021_4939433-lq.mp3")  // Real Crowd Celebration
+            click: new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg"),
+            correct: new Audio("https://actions.google.com/sounds/v1/crowds/team_cheer.ogg"), // هتاف وتشجيع حقيقي عالي
+            wrong: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"), // صوت إحباط/خطأ كرتوني فكاهي
+            fanfare: new Audio("https://actions.google.com/sounds/v1/crowds/battle_crowd_celebration.ogg") // احتفال جماعي مدوٍّ
         };
 
-        // Preload and Unlock Audio on first click
-        function preloadAudio() {
-            Object.values(AUDIO_BANK).forEach(audio => {
-                audio.load();
+        // Unlock and Preload on first user interaction
+        let audioUnlocked = false;
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            audioUnlocked = true;
+            Object.values(AUDIO_BANK).forEach(a => {
+                a.volume = 0.8;
+                a.load();
             });
         }
         ['click', 'touchstart', 'keydown'].forEach(evt => {
-            document.addEventListener(evt, preloadAudio, { once: true });
+            document.addEventListener(evt, unlockAudio, { once: true });
         });
 
         function playSound(type) {
             try {
-                const sound = AUDIO_BANK[type];
-                if (sound) {
-                    sound.currentTime = 0;
-                    sound.play().catch(() => {});
+                const s = AUDIO_BANK[type];
+                if (s) {
+                    s.currentTime = 0;
+                    s.play().catch(() => {});
                 }
             } catch(e) {}
         }
@@ -597,7 +600,7 @@
             subject: 'الدراسات الاجتماعية',
             teacherName: 'مس رشا دياب',
             teacherPhone: '01205333472',
-            bannerUrl: 'https://i.ibb.co/6R5Lz65b/image.jpg',
+            bannerUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop',
             durationMinutes: 30,
             status: 'published',
             adminPass: '330399',
@@ -673,11 +676,7 @@
                             DB.students = data.students || DEFAULT_STUDENTS;
                             DB.questions = data.questions || DEFAULT_QUESTIONS;
                             DB.results = data.results || [];
-                        } else {
-                            await saveDatabase();
                         }
-                    } else {
-                        await saveDatabase();
                     }
                 }
             } catch(e) {
@@ -731,7 +730,7 @@
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
             
             const banner = document.getElementById('display-quiz-banner');
-            banner.src = DB.config.bannerUrl || 'https://i.ibb.co/6R5Lz65b/image.jpg';
+            banner.src = DB.config.bannerUrl || 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
             banner.onerror = () => {
                 banner.src = 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
             };
@@ -879,7 +878,6 @@
 
             const isRandom = DB.config.isRandomOrder !== false;
 
-            // Text-Safe Preparation
             let preparedQuestions = DB.questions.map(q => {
                 const correctText = q.options[q.correct];
                 let optionsList = [...q.options];

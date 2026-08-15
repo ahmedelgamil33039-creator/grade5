@@ -80,7 +80,7 @@
                     </button>
                 </div>
 
-                <!-- Full 16:9 Banner Display (الصورة الجديدة المباشرة كاملة وبدون أي قص) -->
+                <!-- Banner Image -->
                 <div class="w-full rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-2xl bg-slate-950 flex justify-center items-center">
                     <img id="display-quiz-banner" 
                          src="https://i.postimg.cc/Y2FdWsdv/ghlaf.jpg" 
@@ -441,11 +441,16 @@
 
                 <!-- TAB 5: RESULTS -->
                 <div id="admin-tab-results" class="admin-tab-content space-y-4 hidden text-right">
-                    <div class="flex justify-between items-center">
+                    <div class="flex flex-wrap justify-between items-center gap-2">
                         <h4 class="font-bold text-sm text-purple-300">سجل نتائج طلاب الصف الخامس</h4>
-                        <button onclick="exportResultsCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition">
-                            <i class="fa-solid fa-file-excel ml-1"></i> تصدير Excel (CSV)
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="clearAllResults()" class="bg-red-600/30 hover:bg-red-600 text-red-200 border border-red-500/40 font-bold px-3 py-1.5 rounded-xl text-xs transition">
+                                <i class="fa-solid fa-trash-can ml-1"></i> حذف جميع النتائج
+                            </button>
+                            <button onclick="exportResultsCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition">
+                                <i class="fa-solid fa-file-excel ml-1"></i> تصدير Excel (CSV)
+                            </button>
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-right text-slate-300">
@@ -456,7 +461,7 @@
                                     <th class="p-2.5">النسبة</th>
                                     <th class="p-2.5">صواب/خطأ</th>
                                     <th class="p-2.5">التاريخ</th>
-                                    <th class="p-2.5">التفاصيل</th>
+                                    <th class="p-2.5">إجراءات / عرض الورقة</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-results-tbody" class="divide-y divide-slate-800"></tbody>
@@ -551,10 +556,8 @@
     <!-- SCRIPT ENGINE -->
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
-
         const NEW_BANNER_URL = "https://i.postimg.cc/Y2FdWsdv/ghlaf.jpg";
 
-        // HIGH-VOLUME & CLEAR SYNTHESIZER ENGINE
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) {
@@ -582,10 +585,8 @@
                     osc.frequency.setValueAtTime(650, now);
                     gain.gain.setValueAtTime(0.25, now);
                     gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.05);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.05);
                 } 
                 else if (type === 'correct') {
                     [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
@@ -595,10 +596,8 @@
                         osc.frequency.setValueAtTime(freq, now + (i * 0.06));
                         gain.gain.setValueAtTime(0.45, now + (i * 0.06));
                         gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.06) + 0.3);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + (i * 0.06));
-                        osc.stop(now + (i * 0.06) + 0.3);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + (i * 0.06)); osc.stop(now + (i * 0.06) + 0.3);
                     });
                 } 
                 else if (type === 'wrong') {
@@ -608,10 +607,8 @@
                     osc.frequency.setValueAtTime(200, now);
                     gain.gain.setValueAtTime(0.4, now);
                     gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.2);
                 } 
                 else if (type === 'fanfare') {
                     [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, i) => {
@@ -621,10 +618,8 @@
                         osc.frequency.setValueAtTime(freq, now + (i * 0.08));
                         gain.gain.setValueAtTime(0.45, now + (i * 0.08));
                         gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.08) + 0.5);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + (i * 0.08));
-                        osc.stop(now + (i * 0.08) + 0.5);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + (i * 0.08)); osc.stop(now + (i * 0.08) + 0.5);
                     });
                 }
             } catch(e) {}
@@ -1481,7 +1476,7 @@
                     <td class="p-2.5">${s.isBanned ? '<span class="text-amber-400 font-bold">مقيد / أتم الاختبار</span>' : '<span class="text-emerald-400">متاح للاختبار</span>'}</td>
                     <td class="p-2.5 flex gap-2">
                         <button onclick="toggleBanStudent('${s.id}')" class="text-xs ${s.isBanned ? 'text-emerald-400 font-bold' : 'text-amber-400'}">${s.isBanned ? 'فك القيد' : 'حظر'}</button>
-                        <button onclick="deleteStudent('${s.id}')" class="text-red-400 hover:underline">حذف</button>
+                        <button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400 hover:underline">حذف</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1572,7 +1567,8 @@
                 return;
             }
 
-            DB.results.slice().reverse().forEach(r => {
+            DB.results.slice().reverse().forEach((r, index) => {
+                const actualIndex = DB.results.length - 1 - index;
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="p-2.5 font-bold text-white">${r.studentName}</td>
@@ -1580,10 +1576,32 @@
                     <td class="p-2.5 font-bold ${r.percent >= 50 ? 'text-emerald-400' : 'text-red-400'}">${r.percent}%</td>
                     <td class="p-2.5 text-slate-400">${r.correctCount} صح / ${r.wrongCount} خطأ</td>
                     <td class="p-2.5 text-slate-400 font-mono text-[11px]">${r.dateTime}</td>
-                    <td class="p-2.5"><button onclick='displayResultScreen(${JSON.stringify(r)})' class="text-purple-300 hover:text-purple-200 underline text-xs">عرض الورقة</button></td>
+                    <td class="p-2.5 flex items-center gap-2">
+                        <button onclick='displayResultScreen(${JSON.stringify(r)})' class="text-purple-300 hover:text-purple-200 underline text-xs">عرض الورقة</button>
+                        <span class="text-slate-600">|</span>
+                        <button onclick="deleteSingleResult(${actualIndex})" class="text-red-400 hover:text-red-300 text-xs font-semibold px-2 py-1 rounded bg-red-500/10 border border-red-500/20 transition"><i class="fa-solid fa-trash ml-1"></i> حذف</button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        async function deleteSingleResult(index) {
+            if (confirm('هل أنت متأكد من حذف نتيجة هذا الطالب؟')) {
+                DB.results.splice(index, 1);
+                await saveDatabase();
+                renderAdminResults();
+                showToast('تم حذف النتيجة بنجاح.', 'fa-trash');
+            }
+        }
+
+        async function clearAllResults() {
+            if (confirm('تحذير: هل أنت متأكد من حذف جميع النتائج المسجلة بالكامل؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                DB.results = [];
+                await saveDatabase();
+                renderAdminResults();
+                showToast('تم تفريغ وحذف جميع النتائج بنجاح.', 'fa-trash-can');
+            }
         }
 
         function exportResultsCSV() {

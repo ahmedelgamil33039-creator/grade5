@@ -80,10 +80,10 @@
                     </button>
                 </div>
 
-                <!-- Full 16:9 Banner Display (تبدأ فوراً بالصورة الصحيحة بدون أي وميض) -->
+                <!-- Full 16:9 Banner Display (الصورة الجديدة المباشرة كاملة وبدون أي قص) -->
                 <div class="w-full rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-2xl bg-slate-950 flex justify-center items-center">
                     <img id="display-quiz-banner" 
-                         src="https://i.ibb.co/6R5Lz65b/image.jpg" 
+                         src="https://i.postimg.cc/Y2FdWsdv/ghlaf.jpg" 
                          alt="غلاف الاختبار" 
                          class="w-full h-auto aspect-video object-contain">
                 </div>
@@ -343,10 +343,12 @@
                         <div>
                             <label class="block text-xs text-purple-300 mb-1">نوع السؤال</label>
                             <select id="admin-q-type" onchange="handleQTypeChange()" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
-                                <option value="mcq">اختيار من أربعة</option>
+                                <option value="mcq">اختيار من متعدد</option>
                                 <option value="true_false">صح أو خطأ</option>
-                                <option value="complete">أكمل باختيار من أربعة</option>
-                                <option value="error_correction">اكتشف أو صوب الخطأ بأربعة اختيارات</option>
+                                <option value="complete">أكمل العبارة</option>
+                                <option value="error_correction">تصويب الخطأ</option>
+                                <option value="what_results">ما النتائج المترتبة على (باختيارات 4)</option>
+                                <option value="why_explain">بما تفسر (باختيارات 4)</option>
                             </select>
                         </div>
                         <div>
@@ -550,7 +552,9 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
-        // ZERO-LATENCY LOUD & PURE SYNTHESIZER ENGINE (استجابة صوتية فورية بالملي ثانية بدون أي تأخير أو تشويش)
+        const NEW_BANNER_URL = "https://i.postimg.cc/Y2FdWsdv/ghlaf.jpg";
+
+        // HIGH-VOLUME & CLEAR SYNTHESIZER ENGINE
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) {
@@ -562,7 +566,6 @@
             return audioCtx;
         }
 
-        // Instant unlock on touch / pointerdown
         ['pointerdown', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
             window.addEventListener(evt, () => { getAudioContext(); }, { passive: true });
         });
@@ -577,51 +580,51 @@
                     const gain = ctx.createGain();
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(650, now);
-                    gain.gain.setValueAtTime(0.18, now);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.start(now);
-                    osc.stop(now + 0.04);
+                    osc.stop(now + 0.05);
                 } 
                 else if (type === 'correct') {
-                    [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
                         osc.type = 'sine';
                         osc.frequency.setValueAtTime(freq, now + (i * 0.06));
-                        gain.gain.setValueAtTime(0.35, now + (i * 0.06));
-                        gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.06) + 0.25);
+                        gain.gain.setValueAtTime(0.45, now + (i * 0.06));
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.06) + 0.3);
                         osc.connect(gain);
                         gain.connect(ctx.destination);
                         osc.start(now + (i * 0.06));
-                        osc.stop(now + (i * 0.06) + 0.25);
+                        osc.stop(now + (i * 0.06) + 0.3);
                     });
                 } 
                 else if (type === 'wrong') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(220, now);
-                    gain.gain.setValueAtTime(0.3, now);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+                    osc.frequency.setValueAtTime(200, now);
+                    gain.gain.setValueAtTime(0.4, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.start(now);
-                    osc.stop(now + 0.15);
+                    osc.stop(now + 0.2);
                 } 
                 else if (type === 'fanfare') {
-                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                    [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, i) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
-                        osc.type = 'sine';
+                        osc.type = 'triangle';
                         osc.frequency.setValueAtTime(freq, now + (i * 0.08));
-                        gain.gain.setValueAtTime(0.35, now + (i * 0.08));
-                        gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.08) + 0.4);
+                        gain.gain.setValueAtTime(0.45, now + (i * 0.08));
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.08) + 0.5);
                         osc.connect(gain);
                         gain.connect(ctx.destination);
                         osc.start(now + (i * 0.08));
-                        osc.stop(now + (i * 0.08) + 0.4);
+                        osc.stop(now + (i * 0.08) + 0.5);
                     });
                 }
             } catch(e) {}
@@ -633,7 +636,6 @@
             }
         }, { passive: true });
 
-        // Fisher-Yates Randomizer
         function shuffleArray(array) {
             const arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -650,7 +652,7 @@
             subject: 'الدراسات الاجتماعية',
             teacherName: 'مس رشا دياب',
             teacherPhone: '01205333472',
-            bannerUrl: 'https://i.ibb.co/6R5Lz65b/image.jpg',
+            bannerUrl: NEW_BANNER_URL,
             durationMinutes: 30,
             status: 'published',
             adminPass: '330399',
@@ -721,31 +723,36 @@
                     const text = await response.text();
                     if (text && text.trim().length > 10) {
                         const data = JSON.parse(text);
-                        if (data && (data.questions || data.config)) {
+                        if (data && data.questions && data.questions.length > 0) {
                             DB.config = { ...DEFAULT_CONFIG, ...data.config };
-                            // فرض الصورة الصحيحة دائماً ومنع القديمة
-                            DB.config.bannerUrl = 'https://i.ibb.co/6R5Lz65b/image.jpg';
+                            DB.config.bannerUrl = NEW_BANNER_URL;
                             DB.students = data.students || DEFAULT_STUDENTS;
-                            DB.questions = data.questions || DEFAULT_QUESTIONS;
+                            DB.questions = data.questions;
                             DB.results = data.results || [];
+                            initApp();
+                            checkActiveResumeSession();
+                            return;
                         }
                     }
                 }
-            } catch(e) {
-                const saved = localStorage.getItem('grade5_full_master_db');
-                if (saved) {
-                    try { 
-                        DB = JSON.parse(saved); 
-                        DB.config.bannerUrl = 'https://i.ibb.co/6R5Lz65b/image.jpg';
-                    } catch(err) {}
-                }
-            } finally {
-                initApp();
-                checkActiveResumeSession();
+            } catch(e) {}
+
+            const saved = localStorage.getItem('grade5_full_master_db');
+            if (saved) {
+                try { 
+                    const parsed = JSON.parse(saved);
+                    if (parsed && parsed.questions && parsed.questions.length > 0) {
+                        DB = parsed;
+                        DB.config.bannerUrl = NEW_BANNER_URL;
+                    }
+                } catch(err) {}
             }
+            initApp();
+            checkActiveResumeSession();
         }
 
         async function saveDatabase() {
+            DB.config.bannerUrl = NEW_BANNER_URL;
             localStorage.setItem('grade5_full_master_db', JSON.stringify(DB));
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
@@ -785,7 +792,7 @@
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
             
             const banner = document.getElementById('display-quiz-banner');
-            banner.src = 'https://i.ibb.co/6R5Lz65b/image.jpg'; // تثبيت الصورة الأصلية فوراً بدون تأخير
+            banner.src = NEW_BANNER_URL;
 
             const badge = document.getElementById('display-badge-status');
             if (DB.config.status === 'published') {
@@ -1015,8 +1022,10 @@
             const typeLabels = {
                 mcq: 'اختيار من متعدد',
                 true_false: 'صح أو خطأ',
-                complete: 'أكمل باختيار من أربعة',
-                error_correction: 'تصويب الخطأ'
+                complete: 'أكمل العبارة',
+                error_correction: 'تصويب الخطأ',
+                what_results: 'ما النتائج المترتبة على',
+                why_explain: 'بما تفسر'
             };
             document.getElementById('quiz-q-type').innerText = typeLabels[q.type] || 'سؤال';
 
@@ -1309,11 +1318,11 @@
             document.getElementById('admin-input-teacher').value = DB.config.teacherName;
             document.getElementById('admin-input-phone').value = DB.config.teacherPhone;
             document.getElementById('admin-input-duration').value = DB.config.durationMinutes;
-            document.getElementById('admin-input-banner').value = DB.config.bannerUrl;
+            document.getElementById('admin-input-banner').value = NEW_BANNER_URL;
             document.getElementById('admin-input-status').value = DB.config.status;
             document.getElementById('admin-input-newpass').value = '';
 
-            previewBannerInput(DB.config.bannerUrl);
+            previewBannerInput(NEW_BANNER_URL);
             updateRandomButtonUI();
 
             renderAdminQuestions();
@@ -1329,7 +1338,7 @@
             DB.config.teacherName = document.getElementById('admin-input-teacher').value.trim();
             DB.config.teacherPhone = document.getElementById('admin-input-phone').value.trim();
             DB.config.durationMinutes = parseInt(document.getElementById('admin-input-duration').value) || 30;
-            DB.config.bannerUrl = document.getElementById('admin-input-banner').value.trim();
+            DB.config.bannerUrl = NEW_BANNER_URL;
             DB.config.status = document.getElementById('admin-input-status').value;
 
             const newPass = document.getElementById('admin-input-newpass').value.trim();

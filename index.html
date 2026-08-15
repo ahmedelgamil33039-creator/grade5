@@ -548,98 +548,34 @@
         </div>
     </div>
 
-    <!-- AUDIO ENGINE & SCRIPTS -->
+    <!-- SCRIPT ENGINE -->
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
-        // HYBRID REALISTIC AUDIO ENGINE (Web Audio Synthesizer + Fallback for Instant Crowd Cheer & Fail Buzzer)
-        let audioCtx = null;
-        function getAudioContext() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            return audioCtx;
-        }
+        // REAL HIGH QUALITY AUDIO TRACKS (تصفيق بشري حقيقي وتشجيع جماعي + صوت الترومبون الحزين للإحباط)
+        const AUDIO_BANK = {
+            click: new Audio("https://cdn.freesound.org/previews/256/256113_3263906-lq.mp3"),
+            correct: new Audio("https://cdn.freesound.org/previews/277/277021_4939433-lq.mp3"), // Real Clapping & Cheering
+            wrong: new Audio("https://cdn.freesound.org/previews/175/175409_3234914-lq.mp3"),   // Real Sad Trombone Wah-Wah Fail
+            fanfare: new Audio("https://cdn.freesound.org/previews/277/277021_4939433-lq.mp3")  // Real Crowd Celebration
+        };
 
-        // Unlock audio instantly on first interaction
+        // Preload and Unlock Audio on first click
+        function preloadAudio() {
+            Object.values(AUDIO_BANK).forEach(audio => {
+                audio.load();
+            });
+        }
         ['click', 'touchstart', 'keydown'].forEach(evt => {
-            document.addEventListener(evt, () => { getAudioContext(); }, { once: true });
+            document.addEventListener(evt, preloadAudio, { once: true });
         });
 
         function playSound(type) {
             try {
-                const ctx = getAudioContext();
-                const now = ctx.currentTime;
-
-                if (type === 'click') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.start(now); osc.stop(now + 0.05);
-                } 
-                else if (type === 'correct') {
-                    // 1. Cheer Chords (أصوات هتاف نغمي متصاعد مبهج)
-                    const cheerNotes = [523.25, 659.25, 783.99, 1046.50];
-                    cheerNotes.forEach((freq, i) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(freq, now + (i * 0.05));
-                        gain.gain.setValueAtTime(0.25, now + (i * 0.05));
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.05) + 0.35);
-                        osc.connect(gain); gain.connect(ctx.destination);
-                        osc.start(now + (i * 0.05)); osc.stop(now + (i * 0.05) + 0.35);
-                    });
-
-                    // 2. Crowd Clapping Synth (محاكاة تصفيق جماعي حماسي وسريع)
-                    for (let c = 0; c < 12; c++) {
-                        const clapDelay = now + (c * 0.03) + (Math.random() * 0.02);
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(120 + Math.random() * 80, clapDelay);
-                        gain.gain.setValueAtTime(0.3, clapDelay);
-                        gain.gain.exponentialRampToValueAtTime(0.001, clapDelay + 0.04);
-                        osc.connect(gain); gain.connect(ctx.destination);
-                        osc.start(clapDelay); osc.stop(clapDelay + 0.04);
-                    }
-                } 
-                else if (type === 'wrong') {
-                    // Sad Wah-Wah / Descending Fail Buzzer (صوت إحباط طريف وواضح)
-                    const sadNotes = [311.13, 293.66, 277.18, 246.94];
-                    sadNotes.forEach((freq, i) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'sawtooth';
-                        osc.frequency.setValueAtTime(freq, now + (i * 0.12));
-                        osc.frequency.linearRampToValueAtTime(freq - 15, now + (i * 0.12) + 0.15);
-                        gain.gain.setValueAtTime(0.3, now + (i * 0.12));
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.12) + 0.18);
-                        osc.connect(gain); gain.connect(ctx.destination);
-                        osc.start(now + (i * 0.12)); osc.stop(now + (i * 0.12) + 0.18);
-                    });
-                } 
-                else if (type === 'fanfare') {
-                    // Massive Celebration Fanfare (احتفال كامل وتصفيق مدوٍّ)
-                    const victoryChords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
-                    victoryChords.forEach((freq, i) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(freq, now + (i * 0.08));
-                        gain.gain.setValueAtTime(0.3, now + (i * 0.08));
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.08) + 0.6);
-                        osc.connect(gain); gain.connect(ctx.destination);
-                        osc.start(now + (i * 0.08)); osc.stop(now + (i * 0.08) + 0.6);
-                    });
+                const sound = AUDIO_BANK[type];
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play().catch(() => {});
                 }
             } catch(e) {}
         }
@@ -943,7 +879,7 @@
 
             const isRandom = DB.config.isRandomOrder !== false;
 
-            // 1. Text-Safe Preparation
+            // Text-Safe Preparation
             let preparedQuestions = DB.questions.map(q => {
                 const correctText = q.options[q.correct];
                 let optionsList = [...q.options];
@@ -1083,7 +1019,7 @@
             saveActiveAttemptState();
 
             if (activeAttempt.currentIndex < activeAttempt.questions.length) {
-                setTimeout(renderCurrentQuestion, 300);
+                setTimeout(renderCurrentQuestion, 350);
             } else {
                 finishQuiz(false);
             }

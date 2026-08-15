@@ -184,7 +184,7 @@
             </div>
         </section>
 
-        <!-- SCREEN 4: ADMIN DASHBOARD -->
+        <!-- SCREEN 4: FULL ADMIN DASHBOARD -->
         <section id="screen-admin" class="w-full space-y-6 hidden">
             <div class="glass-card rounded-3xl p-6 border border-purple-500/40 space-y-6">
                 <div class="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-purple-500/30">
@@ -194,16 +194,157 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي</h2>
-                            <p class="text-xs text-purple-300">إدارة أسئلة وطلاب الصف الخامس</p>
+                            <p class="text-xs text-purple-300">إدارة أسئلة وطلاب وإعدادات الصف الخامس</p>
                         </div>
                     </div>
-                    <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-2 rounded-xl transition">
-                        <i class="fa-solid fa-arrow-right-from-bracket ml-1"></i> خروج
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-4 py-2 rounded-xl transition">
+                            <i class="fa-solid fa-arrow-right-from-bracket ml-1"></i> خروج
+                        </button>
+                    </div>
                 </div>
 
-                <div class="text-right space-y-4">
-                    <p class="text-xs text-purple-200">يمكنك تعديل الإعدادات والأسئلة والطلاب وحفظها على هذا المتصفح فوراً، أو ربطها بالشيت السحابي متى شئت.</p>
+                <!-- ADMIN TABS -->
+                <div class="flex gap-2 overflow-x-auto pb-2 border-b border-purple-500/30 text-xs font-bold">
+                    <button onclick="switchAdminTab('settings')" id="admin-tab-btn-settings" class="admin-tab-btn px-4 py-2 rounded-xl bg-purple-600 text-white whitespace-nowrap">إدارة الاختبار</button>
+                    <button onclick="switchAdminTab('questions')" id="admin-tab-btn-questions" class="admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">إدارة الأسئلة</button>
+                    <button onclick="switchAdminTab('students')" id="admin-tab-btn-students" class="admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">إدارة الطلاب</button>
+                    <button onclick="switchAdminTab('results')" id="admin-tab-btn-results" class="admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">النتائج والتقارير</button>
+                </div>
+
+                <!-- TAB 1: SETTINGS -->
+                <div id="admin-tab-settings" class="admin-tab-content space-y-4 text-right">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">اسم الاختبار</label>
+                            <input type="text" id="admin-input-title" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">الصف الدراسي</label>
+                            <input type="text" id="admin-input-grade" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">المادة</label>
+                            <input type="text" id="admin-input-subject" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">اسم المعلمة</label>
+                            <input type="text" id="admin-input-teacher" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">رقم الهاتف</label>
+                            <input type="text" id="admin-input-phone" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">مدة الاختبار (بالدقائق)</label>
+                            <input type="number" id="admin-input-duration" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-purple-200 mb-1">رابط صورة واجهة الاختبار</label>
+                            <input type="text" id="admin-input-banner" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button onclick="saveAdminSettings()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">
+                            <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ التعديلات
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB 2: QUESTIONS -->
+                <div id="admin-tab-questions" class="admin-tab-content space-y-6 hidden text-right">
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-purple-500/30 space-y-3">
+                        <h4 class="font-bold text-sm text-purple-300" id="q-form-title">إضافة سؤال جديد</h4>
+                        <input type="hidden" id="admin-q-id">
+                        <div>
+                            <label class="block text-xs text-purple-300 mb-1">نوع السؤال</label>
+                            <select id="admin-q-type" onchange="handleQTypeChange()" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                                <option value="mcq">اختيار من متعدد</option>
+                                <option value="true_false">صح أو خطأ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-purple-300 mb-1">نص السؤال</label>
+                            <textarea id="admin-q-text" rows="2" class="w-full bg-slate-800 border border-slate-700 p-2.5 rounded-xl text-sm text-white"></textarea>
+                        </div>
+                        <div id="admin-q-options-wrap" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" id="admin-q-opt-0" placeholder="الخيار الأول (أ)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                            <input type="text" id="admin-q-opt-1" placeholder="الخيار الثاني (ب)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                            <input type="text" id="admin-q-opt-2" placeholder="الخيار الثالث (ج)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                            <input type="text" id="admin-q-opt-3" placeholder="الخيار الرابع (د)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs text-purple-300 mb-1">الإجابة الصحيحة</label>
+                                <select id="admin-q-correct" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                                    <option value="0">الخيار 1</option>
+                                    <option value="1">الخيار 2</option>
+                                    <option value="2">الخيار 3</option>
+                                    <option value="3">الخيار 4</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-purple-300 mb-1">درجة السؤال</label>
+                                <input type="number" id="admin-q-points" value="1" min="1" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                            </div>
+                        </div>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="saveQuestion()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition">حفظ السؤال</button>
+                            <button onclick="resetQuestionForm()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-xs transition">إلغاء</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-sm text-purple-200">الأسئلة الحالية (<span id="admin-q-count">0</span>)</h4>
+                        <div id="admin-questions-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: STUDENTS -->
+                <div id="admin-tab-students" class="admin-tab-content space-y-4 hidden text-right">
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-purple-500/30 flex flex-wrap gap-2 items-end">
+                        <div class="flex-1 min-w-[150px]">
+                            <label class="block text-xs text-purple-300 mb-1">اسم الطالب</label>
+                            <input type="text" id="admin-new-student-name" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                        </div>
+                        <div class="w-32">
+                            <label class="block text-xs text-purple-300 mb-1">الرقم السري</label>
+                            <input type="text" id="admin-new-student-pass" placeholder="1234" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white text-center font-mono">
+                        </div>
+                        <button onclick="addStudent()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition">إضافة طالب</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-right text-slate-300">
+                            <thead class="bg-slate-900 border-b border-purple-500/30 text-purple-300">
+                                <tr>
+                                    <th class="p-2.5">المعرف</th>
+                                    <th class="p-2.5">الاسم</th>
+                                    <th class="p-2.5">الرقم السري</th>
+                                    <th class="p-2.5">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-students-tbody" class="divide-y divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 4: RESULTS -->
+                <div id="admin-tab-results" class="admin-tab-content space-y-4 hidden text-right">
+                    <h4 class="font-bold text-sm text-purple-300">سجل نتائج طلاب الصف الخامس</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-right text-slate-300">
+                            <thead class="bg-slate-900 border-b border-purple-500/30 text-purple-300">
+                                <tr>
+                                    <th class="p-2.5">الطالب</th>
+                                    <th class="p-2.5">الدرجة</th>
+                                    <th class="p-2.5">النسبة</th>
+                                    <th class="p-2.5">التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-results-tbody" class="divide-y divide-slate-800"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
@@ -245,11 +386,12 @@
     <script>
         const DEFAULT_CONFIG = {
             title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
+            grade: 'الصف الخامس الابتدائي',
+            subject: 'الدراسات الاجتماعية',
             teacherName: 'مس رشا دياب',
             teacherPhone: '01205333472',
             bannerUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop',
             durationMinutes: 30,
-            status: 'published',
             adminPass: '330399'
         };
 
@@ -278,7 +420,7 @@
             },
             {
                 id: 'q_503',
-                type: 'complete',
+                type: 'mcq',
                 text: 'تكونت دلتا نهر النيل في مصر نتيجة التعرية...',
                 options: ['المائية', 'الهوائية', 'الجليدية', 'البحرية'],
                 correct: 0,
@@ -286,8 +428,8 @@
             },
             {
                 id: 'q_504',
-                type: 'error_correction',
-                text: 'صوب الخطأ: يقع جبل سانت كاترين في الصحراء الغربية. التصويب هو:',
+                type: 'mcq',
+                text: 'يقع جبل سانت كاترين في...',
                 options: ['شبه جزيرة سيناء', 'الصحراء الشرقية', 'وادي النيل', 'الدلتا'],
                 correct: 0,
                 points: 2
@@ -301,11 +443,25 @@
             results: []
         };
 
+        function loadLocalData() {
+            const saved = localStorage.getItem('grade5_quiz_db');
+            if (saved) {
+                try {
+                    DB = JSON.parse(saved);
+                } catch(e) {}
+            }
+        }
+
+        function saveLocalData() {
+            localStorage.setItem('grade5_quiz_db', JSON.stringify(DB));
+        }
+
         let currentStudent = null;
         let activeAttempt = null;
         let timerInterval = null;
 
         function initApp() {
+            loadLocalData();
             document.getElementById('display-quiz-title').innerText = DB.config.title;
             document.getElementById('display-teacher-name').innerText = DB.config.teacherName;
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
@@ -455,6 +611,14 @@
             document.getElementById('result-score').innerText = `${score} / ${total}`;
             document.getElementById('result-percent').innerText = `النسبة المئوية: ${percent}%`;
 
+            DB.results.push({
+                name: currentStudent.name,
+                score: `${score} / ${total}`,
+                percent: `${percent}%`,
+                date: new Date().toLocaleTimeString('ar-EG')
+            });
+            saveLocalData();
+
             const breakdown = document.getElementById('result-breakdown');
             breakdown.innerHTML = '';
             details.forEach((d, i) => {
@@ -471,6 +635,7 @@
             navigateTo('screen-result');
         }
 
+        // ADMIN PANEL
         function openAdminModal() {
             document.getElementById('admin-passcode-input').value = '';
             document.getElementById('modal-admin-auth').classList.remove('hidden');
@@ -484,6 +649,7 @@
             const pass = document.getElementById('admin-passcode-input').value.trim();
             if (pass === DB.config.adminPass) {
                 closeAdminModal();
+                loadAdminData();
                 navigateTo('screen-admin');
             } else {
                 showToast('الرقم السري للإدارة غير صحيح!', 'fa-lock', true);
@@ -491,7 +657,187 @@
         }
 
         function logoutAdmin() {
+            initApp();
             navigateTo('screen-home');
+        }
+
+        function switchAdminTab(tabName) {
+            ['settings', 'questions', 'students', 'results'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+                document.getElementById(`admin-tab-btn-${t}`).className = 'admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap';
+            });
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`admin-tab-btn-${tabName}`).className = 'admin-tab-btn px-4 py-2 rounded-xl bg-purple-600 text-white whitespace-nowrap';
+        }
+
+        function loadAdminData() {
+            document.getElementById('admin-input-title').value = DB.config.title;
+            document.getElementById('admin-input-grade').value = DB.config.grade;
+            document.getElementById('admin-input-subject').value = DB.config.subject;
+            document.getElementById('admin-input-teacher').value = DB.config.teacherName;
+            document.getElementById('admin-input-phone').value = DB.config.teacherPhone;
+            document.getElementById('admin-input-duration').value = DB.config.durationMinutes;
+            document.getElementById('admin-input-banner').value = DB.config.bannerUrl;
+
+            renderAdminQuestions();
+            renderAdminStudents();
+            renderAdminResults();
+        }
+
+        function saveAdminSettings() {
+            DB.config.title = document.getElementById('admin-input-title').value.trim();
+            DB.config.grade = document.getElementById('admin-input-grade').value.trim();
+            DB.config.subject = document.getElementById('admin-input-subject').value.trim();
+            DB.config.teacherName = document.getElementById('admin-input-teacher').value.trim();
+            DB.config.teacherPhone = document.getElementById('admin-input-phone').value.trim();
+            DB.config.durationMinutes = parseInt(document.getElementById('admin-input-duration').value) || 30;
+            DB.config.bannerUrl = document.getElementById('admin-input-banner').value.trim();
+            saveLocalData();
+            showToast('تم حفظ الإعدادات بنجاح!', 'fa-check');
+        }
+
+        function handleQTypeChange() {
+            const type = document.getElementById('admin-q-type').value;
+            const wrap = document.getElementById('admin-q-options-wrap');
+            const sel = document.getElementById('admin-q-correct');
+            if (type === 'true_false') {
+                wrap.classList.add('hidden');
+                sel.innerHTML = '<option value="0">عبارة صحيحة</option><option value="1">عبارة خاطئة</option>';
+            } else {
+                wrap.classList.remove('hidden');
+                sel.innerHTML = '<option value="0">الخيار 1</option><option value="1">الخيار 2</option><option value="2">الخيار 3</option><option value="3">الخيار 4</option>';
+            }
+        }
+
+        function renderAdminQuestions() {
+            const list = document.getElementById('admin-questions-list');
+            document.getElementById('admin-q-count').innerText = DB.questions.length;
+            list.innerHTML = '';
+            DB.questions.forEach((q, idx) => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-slate-800/80 rounded-xl border border-purple-500/30 flex justify-between items-center text-xs';
+                div.innerHTML = `
+                    <div class="overflow-hidden pr-2">
+                        <span class="font-bold text-white block">س${idx + 1}: ${q.text}</span>
+                        <span class="text-purple-300 font-semibold">(${q.points} درجات)</span>
+                    </div>
+                    <button onclick="deleteQuestion('${q.id}')" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash"></i></button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function saveQuestion() {
+            const type = document.getElementById('admin-q-type').value;
+            const text = document.getElementById('admin-q-text').value.trim();
+            const points = parseInt(document.getElementById('admin-q-points').value) || 1;
+            const correct = parseInt(document.getElementById('admin-q-correct').value);
+
+            if (!text) {
+                showToast('يرجى كتابة نص السؤال.', 'fa-circle-exclamation', true);
+                return;
+            }
+
+            let options = ['عبارة صحيحة', 'عبارة خاطئة'];
+            if (type === 'mcq') {
+                const opt0 = document.getElementById('admin-q-opt-0').value.trim();
+                const opt1 = document.getElementById('admin-q-opt-1').value.trim();
+                const opt2 = document.getElementById('admin-q-opt-2').value.trim();
+                const opt3 = document.getElementById('admin-q-opt-3').value.trim();
+                if (!opt0 || !opt1 || !opt2 || !opt3) {
+                    showToast('يرجى تعبئة الخيارات الأربعة كاملة.', 'fa-circle-exclamation', true);
+                    return;
+                }
+                options = [opt0, opt1, opt2, opt3];
+            }
+
+            DB.questions.push({
+                id: 'q_' + Date.now(),
+                type, text, options, correct, points
+            });
+            saveLocalData();
+            resetQuestionForm();
+            renderAdminQuestions();
+            showToast('تمت إضافة السؤال بنجاح.', 'fa-check');
+        }
+
+        function deleteQuestion(id) {
+            if (confirm('هل أنت متأكد من حذف هذا السؤال؟')) {
+                DB.questions = DB.questions.filter(q => q.id !== id);
+                saveLocalData();
+                renderAdminQuestions();
+                showToast('تم حذف السؤال.', 'fa-trash');
+            }
+        }
+
+        function resetQuestionForm() {
+            document.getElementById('admin-q-text').value = '';
+            document.getElementById('admin-q-opt-0').value = '';
+            document.getElementById('admin-q-opt-1').value = '';
+            document.getElementById('admin-q-opt-2').value = '';
+            document.getElementById('admin-q-opt-3').value = '';
+        }
+
+        function renderAdminStudents() {
+            const tbody = document.getElementById('admin-students-tbody');
+            tbody.innerHTML = '';
+            DB.students.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2.5 font-mono">${s.id}</td>
+                    <td class="p-2.5 font-bold text-white">${s.name}</td>
+                    <td class="p-2.5 font-mono text-purple-300">${s.passcode}</td>
+                    <td class="p-2.5"><button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400">حذف</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addStudent() {
+            const name = document.getElementById('admin-new-student-name').value.trim();
+            const pass = document.getElementById('admin-new-student-pass').value.trim();
+            if (!name || !pass) {
+                showToast('يرجى كتابة اسم الطالب ورقمه السري.', 'fa-circle-exclamation', true);
+                return;
+            }
+            DB.students.push({
+                id: 'std_' + Date.now().toString().slice(-4),
+                name,
+                passcode: pass
+            });
+            saveLocalData();
+            document.getElementById('admin-new-student-name').value = '';
+            document.getElementById('admin-new-student-pass').value = '';
+            renderAdminStudents();
+            showToast('تمت إضافة الطالب بنجاح.', 'fa-user-check');
+        }
+
+        function deleteStudent(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الطالب؟')) {
+                DB.students = DB.students.filter(s => s.id !== id);
+                saveLocalData();
+                renderAdminStudents();
+                showToast('تم حذف الطالب.', 'fa-trash');
+            }
+        }
+
+        function renderAdminResults() {
+            const tbody = document.getElementById('admin-results-tbody');
+            tbody.innerHTML = '';
+            if (DB.results.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">لا توجد نتائج مسجلة حتى الآن.</td></tr>';
+                return;
+            }
+            DB.results.slice().reverse().forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2.5 font-bold text-white">${r.name}</td>
+                    <td class="p-2.5 font-mono text-purple-300">${r.score}</td>
+                    <td class="p-2.5 font-bold text-emerald-400">${r.percent}</td>
+                    <td class="p-2.5 text-slate-400 font-mono text-[11px]">${r.date}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         window.onload = initApp;

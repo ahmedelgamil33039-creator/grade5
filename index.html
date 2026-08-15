@@ -80,12 +80,12 @@
                     </button>
                 </div>
 
-                <!-- Full 16:9 Banner Display (كاملة بالأبعاد الأصلية) -->
+                <!-- Full 16:9 Banner Display (تبدأ فوراً بالصورة الصحيحة بدون أي وميض) -->
                 <div class="w-full rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-2xl bg-slate-950 flex justify-center items-center">
                     <img id="display-quiz-banner" 
-                         src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" 
+                         src="https://i.ibb.co/6R5Lz65b/image.jpg" 
                          alt="غلاف الاختبار" 
-                         class="w-full h-auto aspect-video object-contain sm:object-cover">
+                         class="w-full h-auto aspect-video object-contain">
                 </div>
 
                 <h1 id="display-quiz-title" class="text-2xl sm:text-3xl font-black text-purple-200 text-glow leading-snug mb-2 wrap-safe">
@@ -550,7 +550,7 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
-        // ZERO-LATENCY LOUD & PURE SYNTHESIZER ENGINE (أصوات أعلى وأوضح بنقاء تام)
+        // ZERO-LATENCY LOUD & PURE SYNTHESIZER ENGINE (استجابة صوتية فورية بالملي ثانية بدون أي تأخير أو تشويش)
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) {
@@ -573,7 +573,6 @@
                 const now = ctx.currentTime;
 
                 if (type === 'click') {
-                    // نقرة خفيفة وواضحة جداً
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sine';
@@ -586,7 +585,6 @@
                     osc.stop(now + 0.04);
                 } 
                 else if (type === 'correct') {
-                    // رنة ماريمبا ثلاثية مبهجة وبصوت مرتفع وواضح
                     [523.25, 659.25, 783.99].forEach((freq, i) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
@@ -601,7 +599,6 @@
                     });
                 } 
                 else if (type === 'wrong') {
-                    // نغمة خشبية مسموعة وواضحة للخطأ بدون إزعاج
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'triangle';
@@ -614,7 +611,6 @@
                     osc.stop(now + 0.15);
                 } 
                 else if (type === 'fanfare') {
-                    // نغمة نجاح واضحة للاحتفال
                     [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
@@ -631,7 +627,6 @@
             } catch(e) {}
         }
 
-        // Global Event for all buttons to have immediate instant click sound
         document.addEventListener('pointerdown', function(e) {
             if (e.target.closest('button') || e.target.closest('select')) {
                 playSound('click');
@@ -655,7 +650,7 @@
             subject: 'الدراسات الاجتماعية',
             teacherName: 'مس رشا دياب',
             teacherPhone: '01205333472',
-            bannerUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop',
+            bannerUrl: 'https://i.ibb.co/6R5Lz65b/image.jpg',
             durationMinutes: 30,
             status: 'published',
             adminPass: '330399',
@@ -728,6 +723,8 @@
                         const data = JSON.parse(text);
                         if (data && (data.questions || data.config)) {
                             DB.config = { ...DEFAULT_CONFIG, ...data.config };
+                            // فرض الصورة الصحيحة دائماً ومنع القديمة
+                            DB.config.bannerUrl = 'https://i.ibb.co/6R5Lz65b/image.jpg';
                             DB.students = data.students || DEFAULT_STUDENTS;
                             DB.questions = data.questions || DEFAULT_QUESTIONS;
                             DB.results = data.results || [];
@@ -737,7 +734,10 @@
             } catch(e) {
                 const saved = localStorage.getItem('grade5_full_master_db');
                 if (saved) {
-                    try { DB = JSON.parse(saved); } catch(err) {}
+                    try { 
+                        DB = JSON.parse(saved); 
+                        DB.config.bannerUrl = 'https://i.ibb.co/6R5Lz65b/image.jpg';
+                    } catch(err) {}
                 }
             } finally {
                 initApp();
@@ -785,10 +785,7 @@
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
             
             const banner = document.getElementById('display-quiz-banner');
-            banner.src = DB.config.bannerUrl || 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
-            banner.onerror = () => {
-                banner.src = 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
-            };
+            banner.src = 'https://i.ibb.co/6R5Lz65b/image.jpg'; // تثبيت الصورة الأصلية فوراً بدون تأخير
 
             const badge = document.getElementById('display-badge-status');
             if (DB.config.status === 'published') {

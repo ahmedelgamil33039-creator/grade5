@@ -1,1 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة مس رشا دياب - اختبارات الصف الخامس الابتدائي</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Tajawal Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            background: linear-gradient(135deg, #0f172a 0%, #2e1065 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(30, 27, 75, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        .glass-modal {
+            background: rgba(15, 10, 30, 0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+        }
+        .btn-3d {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35);
+        }
+        .btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
+        }
+        .wrap-safe {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 transform -translate-y-20 opacity-0 pointer-events-none px-6 py-3 rounded-2xl glass-card flex items-center gap-3 border shadow-2xl">
+        <i id="toast-icon" class="text-xl"></i>
+        <span id="toast-msg" class="text-sm font-bold wrap-safe"></span>
+    </div>
+
+    <!-- MAIN WRAPPER -->
+    <div class="flex-1 flex flex-col justify-center items-center p-3 sm:p-6 w-full max-w-4xl mx-auto">
+
+        <!-- SCREEN 1: HOME & LOGIN -->
+        <section id="screen-home" class="w-full space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border border-purple-500/30">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="display-badge-status" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <i class="fa-solid fa-circle text-[8px] mr-1 animate-pulse"></i> متاح للطلاب
+                    </span>
+                    <button onclick="openAdminModal()" class="text-purple-300 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-xl border border-purple-500/40 bg-purple-950/60 transition">
+                        <i class="fa-solid fa-user-shield ml-1 text-purple-400"></i> الإدارة
+                    </button>
+                </div>
+
+                <div class="w-full max-h-56 sm:max-h-64 rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-lg bg-slate-900 flex justify-center items-center">
+                    <img id="display-quiz-banner" src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" alt="واجهة الاختبار" class="w-full h-full object-cover">
+                </div>
+
+                <h1 id="display-quiz-title" class="text-2xl sm:text-3xl font-black text-purple-200 text-glow leading-snug mb-2 wrap-safe">
+                    اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية
+                </h1>
+                <div class="flex items-center justify-center gap-4 text-xs sm:text-sm text-purple-200/80 font-medium mb-6">
+                    <span><i class="fa-solid fa-chalkboard-user text-purple-400 ml-1"></i> <span id="display-teacher-name">مس رشا دياب</span></span>
+                    <span>|</span>
+                    <span><i class="fa-solid fa-phone text-emerald-400 ml-1"></i> <span id="display-teacher-phone">01205333472</span></span>
+                </div>
+
+                <div class="max-w-md mx-auto space-y-4 text-right">
+                    <div>
+                        <label class="block text-xs font-bold text-purple-200 mb-1">اختر اسم الطالب:</label>
+                        <div class="relative">
+                            <select id="select-student" class="w-full bg-slate-900/90 text-white font-bold p-3.5 rounded-2xl border border-purple-500/40 focus:outline-none focus:border-purple-400 transition text-sm appearance-none cursor-pointer">
+                                <option value="">-- اختر اسمك من القائمة --</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute left-4 top-1/2 -translate-y-1/2 text-purple-400 pointer-events-none text-xs"></i>
+                        </div>
+                    </div>
+
+                    <button onclick="handleStartClick()" class="w-full btn-3d bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black py-4 rounded-2xl text-lg flex items-center justify-center gap-2 border border-purple-400/30">
+                        <i class="fa-solid fa-bolt-lightning text-yellow-300"></i>
+                        <span>بدء اختبار الصف الخامس</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: ACTIVE QUIZ -->
+        <section id="screen-quiz" class="w-full space-y-4 hidden">
+            <div class="glass-card rounded-2xl p-4 flex justify-between items-center border border-purple-500/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold shadow-md flex-shrink-0">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="text-xs text-purple-300 truncate" id="quiz-header-teacher">مس رشا دياب</div>
+                        <div class="text-sm font-bold text-purple-100 truncate" id="quiz-header-student">طالب</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 flex-shrink-0">
+                    <div class="bg-red-500/20 text-red-300 border border-red-500/40 px-3 py-1.5 rounded-xl font-mono font-bold text-sm flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-clock animate-pulse text-red-400"></i>
+                        <span id="quiz-timer">29:59</span>
+                    </div>
+                    <div class="bg-purple-950/80 text-purple-200 border border-purple-500/40 px-3 py-1.5 rounded-xl font-bold text-xs">
+                        <span id="quiz-question-counter">السؤال 1 من 4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-5 sm:p-8 space-y-6 border border-purple-500/40">
+                <div class="flex items-center justify-between">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30" id="quiz-q-type">سؤال</span>
+                    <span class="text-xs font-semibold text-purple-300">الدرجة: <span id="quiz-q-points" class="text-purple-200 font-bold">1</span></span>
+                </div>
+
+                <div class="w-full py-2 text-center">
+                    <h2 id="quiz-q-text" class="text-lg sm:text-2xl font-black text-white leading-relaxed wrap-safe">
+                        نص السؤال...
+                    </h2>
+                </div>
+
+                <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
+
+                <div class="pt-4 border-t border-purple-500/30 flex justify-end">
+                    <button onclick="confirmExitQuiz()" class="text-purple-300 hover:text-red-400 text-xs font-bold px-4 py-2 rounded-xl transition">
+                        <i class="fa-solid fa-flag-checkered ml-1"></i> إنهاء الاختبار
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: RESULTS SCREEN -->
+        <section id="screen-result" class="w-full space-y-6 hidden">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 text-center border border-purple-500/40 space-y-6">
+                <div id="result-status-icon" class="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+
+                <div>
+                    <h2 id="result-headline" class="text-2xl sm:text-3xl font-black text-white mb-2 wrap-safe">ممتاز يا بطل!</h2>
+                    <p id="result-message" class="text-sm text-purple-200 max-w-md mx-auto leading-relaxed wrap-safe">رسالة التحفيز...</p>
+                </div>
+
+                <div class="bg-purple-950/80 rounded-2xl p-6 border border-purple-500/40 inline-block px-12 shadow-inner">
+                    <div class="text-xs font-bold text-purple-300 mb-1">الدرجة النهائية</div>
+                    <div class="text-4xl sm:text-5xl font-black text-purple-300 font-mono tracking-tight" id="result-score">0 / 0</div>
+                    <div class="text-sm font-bold text-emerald-400 mt-2" id="result-percent">النسبة المئوية: 0%</div>
+                </div>
+
+                <div class="text-right space-y-3 pt-4">
+                    <h3 class="text-base font-bold text-purple-300"><i class="fa-solid fa-list-check ml-2"></i> تفاصيل الإجابات:</h3>
+                    <div id="result-breakdown" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+                </div>
+
+                <button onclick="navigateTo('screen-home')" class="w-full btn-3d bg-purple-900/60 hover:bg-purple-800 text-white font-bold py-3.5 rounded-2xl transition border border-purple-500/40">
+                    العودة للشاشة الرئيسية
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: ADMIN DASHBOARD -->
+        <section id="screen-admin" class="w-full space-y-6 hidden">
+            <div class="glass-card rounded-3xl p-6 border border-purple-500/40 space-y-6">
+                <div class="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-purple-500/30">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-purple-500/20 border border-purple-500/30 text-purple-300 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي</h2>
+                            <p class="text-xs text-purple-300">إدارة أسئلة وطلاب الصف الخامس</p>
+                        </div>
+                    </div>
+                    <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-2 rounded-xl transition">
+                        <i class="fa-solid fa-arrow-right-from-bracket ml-1"></i> خروج
+                    </button>
+                </div>
+
+                <div class="text-right space-y-4">
+                    <p class="text-xs text-purple-200">يمكنك تعديل الإعدادات والأسئلة والطلاب وحفظها على هذا المتصفح فوراً، أو ربطها بالشيت السحابي متى شئت.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODALS -->
+    <div id="modal-passcode" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+        <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
+            <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-2xl mx-auto flex items-center justify-center text-xl">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <h3 class="font-bold text-lg text-white">التحقق من هوية الطالب</h3>
+            <p class="text-xs text-purple-300 wrap-safe" id="passcode-student-label">أدخل الرقم السري</p>
+            <input type="password" id="student-passcode-input" placeholder="••••" class="w-full bg-slate-900 border border-purple-500/40 p-3 rounded-2xl text-center text-xl font-mono text-white tracking-widest focus:outline-none focus:border-purple-400">
+            <div class="flex gap-2">
+                <button onclick="closePasscodeModal()" class="w-1/2 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">إلغاء</button>
+                <button onclick="verifyStudentPasscode()" class="w-1/2 bg-purple-600 hover:bg-purple-500 text-white py-2.5 rounded-xl text-xs font-bold">دخول</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-admin-auth" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+        <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
+            <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-2xl mx-auto flex items-center justify-center text-xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="font-bold text-lg text-white">دخول لوحة الإدارة</h3>
+            <p class="text-xs text-purple-300">أدخل الرقم السري الإداري (330399)</p>
+            <input type="password" id="admin-passcode-input" placeholder="330399" class="w-full bg-slate-900 border border-purple-500/40 p-3 rounded-2xl text-center text-base font-mono text-white tracking-wider focus:outline-none focus:border-purple-400">
+            <div class="flex gap-2">
+                <button onclick="closeAdminModal()" class="w-1/2 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">إلغاء</button>
+                <button onclick="verifyAdminLogin()" class="w-1/2 bg-purple-600 hover:bg-purple-500 text-white py-2.5 rounded-xl text-xs font-bold">دخول</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT ENGINE -->
+    <script>
+        const DEFAULT_CONFIG = {
+            title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
+            teacherName: 'مس رشا دياب',
+            teacherPhone: '01205333472',
+            bannerUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop',
+            durationMinutes: 30,
+            status: 'published',
+            adminPass: '330399'
+        };
+
+        const DEFAULT_STUDENTS = [
+            { id: 'std_501', name: 'عمر خالد', passcode: '1122' },
+            { id: 'std_502', name: 'فاطمة محمود', passcode: '3344' },
+            { id: 'std_503', name: 'يوسف حسام', passcode: '5566' }
+        ];
+
+        const DEFAULT_QUESTIONS = [
+            {
+                id: 'q_501',
+                type: 'mcq',
+                text: 'تعد خطوط الطول ودوائر العرض خطوطاً وهمية تفيد في تحديد الأماكن والتوقيت...',
+                options: ['الفلكي', 'الجغرافي', 'السطحي', 'المناخي'],
+                correct: 0,
+                points: 1
+            },
+            {
+                id: 'q_502',
+                type: 'true_false',
+                text: 'تشرق الشمس على الأماكن الواقعة شرق خط جرينتش قبل الأماكن الواقعة غربه.',
+                options: ['عبارة صحيحة', 'عبارة خاطئة'],
+                correct: 0,
+                points: 1
+            },
+            {
+                id: 'q_503',
+                type: 'complete',
+                text: 'تكونت دلتا نهر النيل في مصر نتيجة التعرية...',
+                options: ['المائية', 'الهوائية', 'الجليدية', 'البحرية'],
+                correct: 0,
+                points: 2
+            },
+            {
+                id: 'q_504',
+                type: 'error_correction',
+                text: 'صوب الخطأ: يقع جبل سانت كاترين في الصحراء الغربية. التصويب هو:',
+                options: ['شبه جزيرة سيناء', 'الصحراء الشرقية', 'وادي النيل', 'الدلتا'],
+                correct: 0,
+                points: 2
+            }
+        ];
+
+        let DB = {
+            config: DEFAULT_CONFIG,
+            students: DEFAULT_STUDENTS,
+            questions: DEFAULT_QUESTIONS,
+            results: []
+        };
+
+        let currentStudent = null;
+        let activeAttempt = null;
+        let timerInterval = null;
+
+        function initApp() {
+            document.getElementById('display-quiz-title').innerText = DB.config.title;
+            document.getElementById('display-teacher-name').innerText = DB.config.teacherName;
+            document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
+            document.getElementById('display-quiz-banner').src = DB.config.bannerUrl;
+
+            const select = document.getElementById('select-student');
+            select.innerHTML = '<option value="">-- اختر اسمك من القائمة --</option>';
+            DB.students.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.innerText = s.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function showToast(msg, icon = 'fa-circle-info', isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = msg;
+            toastIcon.className = `fa-solid ${icon} ${isError ? 'text-red-400' : 'text-purple-400'}`;
+            toast.classList.remove('opacity-0', '-translate-y-20', 'pointer-events-none');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-20', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function navigateTo(screenId) {
+            ['screen-home', 'screen-quiz', 'screen-result', 'screen-admin'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function handleStartClick() {
+            const studentId = document.getElementById('select-student').value;
+            if (!studentId) {
+                showToast('يرجى اختيار اسم الطالب أولاً.', 'fa-circle-exclamation', true);
+                return;
+            }
+            currentStudent = DB.students.find(s => s.id === studentId);
+            document.getElementById('passcode-student-label').innerText = `الطالب: ${currentStudent.name}`;
+            document.getElementById('student-passcode-input').value = '';
+            document.getElementById('modal-passcode').classList.remove('hidden');
+        }
+
+        function closePasscodeModal() {
+            document.getElementById('modal-passcode').classList.add('hidden');
+        }
+
+        function verifyStudentPasscode() {
+            const entered = document.getElementById('student-passcode-input').value.trim();
+            if (entered === currentStudent.passcode) {
+                closePasscodeModal();
+                startActualQuiz();
+            } else {
+                showToast('الرقم السري غير صحيح.', 'fa-triangle-exclamation', true);
+            }
+        }
+
+        function startActualQuiz() {
+            activeAttempt = {
+                questions: DB.questions,
+                currentIndex: 0,
+                answers: {},
+                timeRemaining: DB.config.durationMinutes * 60
+            };
+
+            document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
+            document.getElementById('quiz-header-student').innerText = currentStudent.name;
+
+            navigateTo('screen-quiz');
+            renderCurrentQuestion();
+            startQuizTimer();
+        }
+
+        function renderCurrentQuestion() {
+            const q = activeAttempt.questions[activeAttempt.currentIndex];
+            document.getElementById('quiz-question-counter').innerText = `السؤال ${activeAttempt.currentIndex + 1} من ${activeAttempt.questions.length}`;
+            document.getElementById('quiz-q-points').innerText = q.points;
+            document.getElementById('quiz-q-text').innerText = q.text;
+
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'glass-card hover:bg-purple-600/30 border border-purple-500/40 hover:border-purple-300 p-4 rounded-2xl text-white font-bold text-sm sm:text-base transition text-center btn-3d flex items-center justify-center min-h-[55px] wrap-safe leading-relaxed';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(index) {
+            const currentQ = activeAttempt.questions[activeAttempt.currentIndex];
+            activeAttempt.answers[currentQ.id] = index;
+            activeAttempt.currentIndex++;
+
+            if (activeAttempt.currentIndex < activeAttempt.questions.length) {
+                setTimeout(renderCurrentQuestion, 200);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function startQuizTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                activeAttempt.timeRemaining--;
+                const m = Math.floor(activeAttempt.timeRemaining / 60);
+                const s = activeAttempt.timeRemaining % 60;
+                document.getElementById('quiz-timer').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+                if (activeAttempt.timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function confirmExitQuiz() {
+            if (confirm('هل ترغب في إنهاء الاختبار الآن؟')) finishQuiz();
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            let total = 0, score = 0, details = [];
+
+            activeAttempt.questions.forEach(q => {
+                total += q.points;
+                const ans = activeAttempt.answers[q.id];
+                const isCorrect = (ans === q.correct);
+                if (isCorrect) score += q.points;
+
+                details.push({
+                    q: q.text,
+                    ans: ans !== undefined ? q.options[ans] : 'لم تتم الإجابة',
+                    correct: q.options[q.correct],
+                    isCorrect: isCorrect
+                });
+            });
+
+            const percent = Math.round((score / total) * 100);
+            document.getElementById('result-score').innerText = `${score} / ${total}`;
+            document.getElementById('result-percent').innerText = `النسبة المئوية: ${percent}%`;
+
+            const breakdown = document.getElementById('result-breakdown');
+            breakdown.innerHTML = '';
+            details.forEach((d, i) => {
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-2xl border text-xs leading-relaxed ${d.isCorrect ? 'bg-emerald-900/20 border-emerald-600/40' : 'bg-red-900/20 border-red-600/40'}`;
+                item.innerHTML = `
+                    <div class="font-bold text-white mb-1">س${i+1}: ${d.q}</div>
+                    <div class="text-purple-200">إجابتك: <span class="font-bold ${d.isCorrect ? 'text-emerald-300' : 'text-red-300'}">${d.ans}</span></div>
+                    ${!d.isCorrect ? `<div class="text-emerald-400 mt-0.5 font-bold">الإجابة الصحيحة: ${d.correct}</div>` : ''}
+                `;
+                breakdown.appendChild(item);
+            });
+
+            navigateTo('screen-result');
+        }
+
+        function openAdminModal() {
+            document.getElementById('admin-passcode-input').value = '';
+            document.getElementById('modal-admin-auth').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('modal-admin-auth').classList.add('hidden');
+        }
+
+        function verifyAdminLogin() {
+            const pass = document.getElementById('admin-passcode-input').value.trim();
+            if (pass === DB.config.adminPass) {
+                closeAdminModal();
+                navigateTo('screen-admin');
+            } else {
+                showToast('الرقم السري للإدارة غير صحيح!', 'fa-lock', true);
+            }
+        }
+
+        function logoutAdmin() {
+            navigateTo('screen-home');
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>

@@ -110,7 +110,7 @@
 
                     <button onclick="handleStartClick()" class="w-full btn-3d bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black py-4 rounded-2xl text-lg flex items-center justify-center gap-2 border border-purple-400/30">
                         <i class="fa-solid fa-bolt-lightning text-yellow-300"></i>
-                        <span>بدء اختبار الصف الخامس</span>
+                        <span>بدء اختبار الصف الخامس (50 سؤالاً)</span>
                     </button>
                 </div>
             </div>
@@ -132,10 +132,10 @@
                 <div class="flex items-center gap-3 flex-shrink-0">
                     <div class="bg-red-500/20 text-red-300 border border-red-500/40 px-3 py-1.5 rounded-xl font-mono font-bold text-sm flex items-center gap-1.5 shadow">
                         <i class="fa-solid fa-clock animate-pulse text-red-400"></i>
-                        <span id="quiz-timer">29:59</span>
+                        <span id="quiz-timer">39:59</span>
                     </div>
                     <div class="bg-purple-950/80 text-purple-200 border border-purple-500/40 px-3 py-1.5 rounded-xl font-bold text-xs">
-                        <span id="quiz-question-counter">السؤال 1 من 40</span>
+                        <span id="quiz-question-counter">السؤال 1 من 50</span>
                     </div>
                 </div>
             </div>
@@ -226,7 +226,7 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي</h2>
-                            <p class="text-xs text-purple-300">متصلة سحابياً ومحلياً بجداول بيانات Google</p>
+                            <p class="text-xs text-purple-300">متصلة سحابياً ومحلياً بجداول بيانات Google (الصف الخامس)</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -497,8 +497,8 @@
             </div>
             <h3 class="font-bold text-lg text-white">هل أنت مستعد لبدء الاختبار؟</h3>
             <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs text-purple-200 space-y-1.5 text-right">
-                <div class="flex justify-between"><span>عدد الأسئلة:</span> <span id="ready-q-count" class="font-bold text-purple-300">40 سؤالاً</span></div>
-                <div class="flex justify-between"><span>مدة الاختبار:</span> <span id="ready-duration" class="font-bold text-purple-300">30 دقيقة</span></div>
+                <div class="flex justify-between"><span>عدد الأسئلة:</span> <span id="ready-q-count" class="font-bold text-purple-300">50 سؤالاً</span></div>
+                <div class="flex justify-between"><span>مدة الاختبار:</span> <span id="ready-duration" class="font-bold text-purple-300">40 دقيقة</span></div>
                 <div class="text-[11px] text-amber-300 pt-1">تنبيه: لا يمكن الرجوع للسؤال السابق بعد الإجابة.</div>
             </div>
             <div class="flex gap-2">
@@ -641,14 +641,14 @@
         }
 
         const DEFAULT_CONFIG = {
-            testId: 'exam_soc_05_v8_final',
+            testId: 'exam_soc_05_v50_final',
             title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
             grade: 'الصف الخامس الابتدائي',
             subject: 'الدراسات الاجتماعية',
             teacherName: 'مس رشا دياب',
             teacherPhone: '01205333472',
             bannerUrl: NEW_BANNER_URL,
-            durationMinutes: 30,
+            durationMinutes: 40,
             status: 'published',
             adminPass: '330399',
             isRandomOrder: true
@@ -660,27 +660,21 @@
             { id: 'std_503', name: 'يوسف حسام', passcode: '5566', isBanned: false, banReason: '', banTime: '' }
         ];
 
-        // --- الأسئلة الـ 40 الأساسية المطلقة ---
+        // --- 50 سؤالاً متكاملة لمنهج الصف الخامس الابتدائي ---
         const DEFAULT_QUESTIONS = [
-            { id: 'q_tf_1', type: 'true_false', text: 'تُعد شبكة الإحداثيات خطوطاً حقيقية محفورة على سطح الأرض لتسهيل حركة الملاحة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_2', type: 'true_false', text: 'تتشابه خطوط الطول ودوائر العرض في أنهما يستخدمان لتحديد الموقع على سطح الأرض بدقة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
-            { id: 'q_tf_3', type: 'true_false', text: 'تصبح دوائر العرض أكبر حجماً كلما ابتعدنا عن دائرة الاستواء باتجاه القطبين.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_4', type: 'true_false', text: 'يمر مدار الجدي في الأجزاء الجنوبية من الأراضي المصرية.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_5', type: 'true_false', text: 'يقسّم خط جرينتش الكرة الأرضية إلى نصفين متساويين، أحدهما شرقي والآخر غربي.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
+            // 1. صح أو خطأ (10 أسئلة)
+            { id: 'q_tf_1', type: 'true_false', text: 'تُعد شبكة الإحداثيات خطوطاً وهمية رسمها العلماء على الخرائط لتحديد الموقع بدقة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
+            { id: 'q_tf_2', type: 'true_false', text: 'تتشابه خطوط الطول ودوائر العرض في أنهما خطوط حقيقية مرسومة على الطبيعة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
+            { id: 'q_tf_3', type: 'true_false', text: 'تصبح دوائر العرض أصغر حجماً كلما ابتعدنا عن دائرة الاستواء باتجاه القطبين.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
+            { id: 'q_tf_4', type: 'true_false', text: 'يمر مدار السرطان في الأجزاء الجنوبية من الأراضي المصرية.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
+            { id: 'q_tf_5', type: 'true_false', text: 'يقسّم خط جرينتش الكرة الأرضية إلى نصفين متساويين، شرقي وغربي.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
             { id: 'q_tf_6', type: 'true_false', text: 'تُفيد دوائر العرض في حساب فروق التوقيت بين المدن المختلفة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_7', type: 'true_false', text: 'تدور الأرض حول محورها أمام الشمس مرة كل 24 ساعة من الشرق إلى الغرب.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
+            { id: 'q_tf_7', type: 'true_false', text: 'تدور الأرض حول محورها أمام الشمس مرة كل 24 ساعة من الغرب إلى الشرق.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
             { id: 'q_tf_8', type: 'true_false', text: 'يسبق التوقيت في مدينة بورسعيد التوقيت في مدينة مرسى مطروح.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
             { id: 'q_tf_9', type: 'true_false', text: 'تقع مصر بالكامل في نصف الكرة الأرضية الشمالي والشرقي.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
-            { id: 'q_tf_10', type: 'true_false', text: 'يبلغ عدد دوائر العرض 360 دائرة، بينما يبلغ عدد خطوط الطول 180 خطاً.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_11', type: 'true_false', text: 'تُعد دائرة الاستواء هي المرجع الأساسي لتقسيم الأرض إلى أقاليم مناخية.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
-            { id: 'q_tf_12', type: 'true_false', text: 'الموقع الفلكي هو موقع المكان بالنسبة لليابس والمسطحات المائية المجاورة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_13', type: 'true_false', text: 'تبلغ الدرجة الفلكية لكل من خط جرينتش ودائرة الاستواء صفراً.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
-            { id: 'q_tf_14', type: 'true_false', text: 'تقع مصر بين دائرتي عرض 22 و 31.36 جنوب دائرة الاستواء.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_15', type: 'true_false', text: 'يبلغ فرق التوقيت بين كل خط طول والآخر أربع دقائق زمنية.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
-            { id: 'q_tf_16', type: 'true_false', text: 'استخدم المصريون القدماء علم الفلك لتحديد مواقع المعابد وتوجيهها بدقة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
-            { id: 'q_tf_17', type: 'true_false', text: 'الدائرة القطبية الجنوبية تقع عند درجة 66.5 شمال دائرة الاستواء.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_18', type: 'true_false', text: 'تساعدنا خطوط الطول في التعرف على أحوال المناخ من حيث الحرارة والرياح.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
-            { id: 'q_tf_19', type: 'true_false', text: 'كلما اتجهنا شرق خط جرينتش فإننا نقوم بطرح فروق التوقيت من الساعة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
+            { id: 'q_tf_10', type: 'true_false', text: 'يبلغ عدد خطوط الطول 360 خطاً، بينما يبلغ عدد دوائر العرض 180 دائرة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
+
+            // 2. اختيار من متعدد (10 أسئلة)
             { id: 'q_mcq_1', type: 'mcq', text: 'الدائرة التي تقسم الكرة الأرضية طولياً إلى جزء شرقي وجزء غربي هي:', options: ['دائرة الاستواء', 'مدار السرطان', 'خط جرينتش', 'الدائرة القطبية الشمالية'], correct: 2, points: 1, image: '' },
             { id: 'q_mcq_2', type: 'mcq', text: 'أي من المدن التالية تشرق عليها الشمس أولاً وفقاً لموقعها الفلكي؟', options: ['السلوم', 'الإسكندرية', 'العريش', 'مطروح'], correct: 2, points: 1, image: '' },
             { id: 'q_mcq_3', type: 'mcq', text: 'تقع الأجزاء الشمالية من مصر ضمن إقليم:', options: ['الإقليم الصحراوي الحار', 'إقليم البحر المتوسط المعتدل', 'الإقليم المداري', 'الإقليم الاستوائي'], correct: 1, points: 1, image: '' },
@@ -691,16 +685,42 @@
             { id: 'q_mcq_8', type: 'mcq', text: 'تقع مصر بين خطي طول 25 و 37 في اتجاه:', options: ['غرب جرينتش', 'شرق جرينتش', 'شمال الاستواء', 'جنوب الاستواء'], correct: 1, points: 1, image: '' },
             { id: 'q_mcq_9', type: 'mcq', text: 'تصغر دوائر العرض تدريجياً كلما اتجهنا نحو:', options: ['خط جرينتش', 'القطبين', 'دائرة الاستواء', 'قارة أفريقيا'], correct: 1, points: 1, image: '' },
             { id: 'q_mcq_10', type: 'mcq', text: 'تشرق الشمس على المناطق الشرقية قبل الغربية بسبب دوران الأرض حول:', options: ['الشمس', 'محورها', 'القمر', 'الكواكب الأخرى'], correct: 1, points: 1, image: '' },
-            { id: 'q_mcq_11', type: 'mcq', text: 'عند حساب التوقيت، إذا كان الفرق بين مدينتين 15 خط طول، فإن فرق الزمن يكون:', options: ['30 دقيقة', '45 دقيقة', '60 دقيقة', '15 دقيقة'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_12', type: 'mcq', text: 'تشترك خطوط الطول ودوائر العرض في كونهما:', options: ['أنصاف دوائر رأسية', 'دوائر أفقية كاملة', 'خطوطاً وهمية', 'تحددان الأقاليم المناخية'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_13', type: 'mcq', text: 'يمر مدار السرطان في مصر بجهة:', options: ['الشمال', 'الشرق', 'الجنوب', 'الغرب'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_14', type: 'mcq', text: 'الدرجة الفلكية للدائرة القطبية الجنوبية هي:', options: ['23.5 جنوباً', '66.5 شمالاً', '66.5 جنوباً', '90 جنوباً'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_15', type: 'mcq', text: 'الموقع الفلكي لمصر يمتد بين دائرتي عرض:', options: ['25 - 37 شمالاً', '22 - 31.36 شمالاً', '22 - 36.31 جنوباً', '25 - 37 شرقاً'], correct: 1, points: 1, image: '' },
-            { id: 'q_mcq_16', type: 'mcq', text: 'تستخدم شبكة الإحداثيات عند السفر واكتشاف الأماكن لتحديد:', options: ['نوع التربة', 'الموقع بدقة', 'كمية الأمطار', 'اتجاه الرياح'], correct: 1, points: 1, image: '' },
-            { id: 'q_mcq_17', type: 'mcq', text: 'الخط الرئيسي الذي تُنسب إليه خطوط الطول هو:', options: ['خط الاستواء', 'خط لندن', 'خط جرينتش', 'مدار الجدي'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_18', type: 'mcq', text: 'الفرق بين الموقع الجغرافي والموقع الفلكي أن الأخير يعتمد على:', options: ['اليابس والماء', 'الحدود السياسية', 'شبكة الإحداثيات', 'مظاهر السطح'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_19', type: 'mcq', text: 'أكبر دوائر العرض هي:', options: ['القطب الشمالي', 'مدار السرطان', 'دائرة الاستواء', 'الدائرة القطبية'], correct: 2, points: 1, image: '' },
-            { id: 'q_mcq_20', type: 'mcq', text: 'يُعد بناء الأهرامات وتوجيهها دليلاً على براعة المصريين القدماء في علم:', options: ['الكيمياء', 'الطب', 'الفلك', 'التحنيط'], correct: 2, points: 1, image: '' }
+
+            // 3. أكمل العبارات (10 أسئلة)
+            { id: 'q_com_1', type: 'complete', text: 'الخط الرئيسي الذي تُنسب إليه خطوط الطول هو خط ...........', options: ['الاستواء', 'جرينتش', 'السرطان', 'الجدي'], correct: 1, points: 1, image: '' },
+            { id: 'q_com_2', type: 'complete', text: 'أكبر دوائر العرض على سطح الأرض هي دائرة ...........', options: ['الاستواء', 'القطب الشمالي', 'مدار السرطان', 'الدائرة القطبية'], correct: 0, points: 1, image: '' },
+            { id: 'q_com_3', type: 'complete', text: 'يبلغ فرق الزمن بين كل خط طول والآخر نحو ........... دقائق.', options: ['أربع', 'عشر', 'ستين', 'خمس عشرة'], correct: 0, points: 1, image: '' },
+            { id: 'q_com_4', type: 'complete', text: 'الموقع بالنسبة لخطوط الطول ودوائر العرض يسمى الموقع ...........', options: ['الجغرافي', 'الفلكي', 'السياسي', 'الاقتصادي'], correct: 1, points: 1, image: '' },
+            { id: 'q_com_5', type: 'complete', text: 'تقع الأراضي المصرية بين دائرتي عرض 22 و 31.36 ........... دائرة الاستواء.', options: ['شمال', 'جنوب', 'شرق', 'غرب'], correct: 0, points: 1, image: '' },
+            { id: 'q_com_6', type: 'complete', text: 'تفيدنا شبكة الإحداثيات في تحديد ........... على سطح الأرض بدقة.', options: ['الموقع', 'المناخ', 'العمق', 'الارتفاع'], correct: 0, points: 1, image: '' },
+            { id: 'q_com_7', type: 'complete', text: 'تتخذ خطوط الطول شكل أنصاف دوائر ...........', options: ['أفقية', 'رأسية', 'مائلة', 'دائرية'], correct: 1, points: 1, image: '' },
+            { id: 'q_com_8', type: 'complete', text: 'تدور الأرض حول محورها من الغرب إلى ........... مرة كل 24 ساعة.', options: ['الشرق', 'الشمال', 'الجنوب', 'الداخل'], correct: 0, points: 1, image: '' },
+            { id: 'q_com_9', type: 'complete', text: 'يمر مدار السرطان في الأجزاء ........... من مصر.', options: ['الشمالية', 'الجنوبية', 'الشرقية', 'الغربية'], correct: 1, points: 1, image: '' },
+            { id: 'q_com_10', type: 'complete', text: 'استخدم المصري القديم النجوم في معرفة مواقع المعابد وتوجيهها بدقة في علم ...........', options: ['الفلك', 'الطب', 'الكيمياء', 'الهندسة'], correct: 0, points: 1, image: '' },
+
+            // 4. تصويب الخطأ (10 أسئلة)
+            { id: 'q_err_1', type: 'error_correction', text: 'تُعد شبكة الإحداثيات خطوطاً حقيقية مرسومة على الأرض. (الصواب: وهمية)', options: ['وهمية', 'حقيقية', 'طبيعية', 'ملموسة'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_2', type: 'error_correction', text: 'تمتد مصر بين دائرتي عرض 22 و 31.36 جنوب الاستواء. (الصواب: شمال)', options: ['شمال', 'جنوب', 'شرق', 'غرب'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_3', type: 'error_correction', text: 'تفيد خطوط الطول في دراسة الأحوال المناخية. (الصواب: دوائر العرض)', options: ['دوائر العرض', 'خطوط الطول', 'خط جرينتش', 'مدار السرطان'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_4', type: 'error_correction', text: 'كلما اتجهنا شرق جرينتش نقوم بطرح فروق التوقيت. (الصواب: نجمع)', options: ['نجمع', نطرح, 'نضرب', 'نقسم'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_5', type: 'error_correction', text: 'الموقع الفلكي هو موقع المكان بالنسبة لليابس والماء. (الصواب: الجغرافي)', options: ['الجغرافي', 'الفلكي', 'السياسي', 'الاستراتيجي'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_6', type: 'error_correction', text: 'يبلغ عدد خطوط الطول 180 خطاً. (الصواب: 360)', options: ['360', '90', '180', '720'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_7', type: 'error_correction', text: 'تشرق الشمس على غرب مصر قبل شرقها. (الصواب: الشرق)', options: ['الشرق', 'الغرب', 'الشمال', 'الجنوب'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_8', type: 'error_correction', text: 'دائرة الاستواء تقع عند درجة 90. (الصواب: 0)', options: ['0', '90', '23.5', '66.5'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_9', type: 'error_correction', text: 'تقع معظم الأراضي المصرية في الإقليم الاستوائي. (الصواب: الصحراوي الحار)', options: ['الصحراوي الحار', 'الاستوائي', 'القطبي', 'المعتدل'], correct: 0, points: 1, image: '' },
+            { id: 'q_err_10', type: 'error_correction', text: 'تدور الأرض حول محورها من الشرق إلى الغرب. (الصواب: من الغرب للشرق)', options: ['من الغرب للشرق', 'من الشرق للغرب', 'من الشمال للجنوب', 'من الجنوب للشمال'], correct: 0, points: 1, image: '' },
+
+            // 5. بما تفسر (10 أسئلة استنتاجية)
+            { id: 'q_why_1', type: 'why_explain', text: 'بما تفسر: أهمية خطوط الطول في حياتنا؟', options: ['تحديد الموقع ومعرفة فروق التوقيت الزمني', 'قياس كمية الأمطار الساقطة', 'معرفة سرعة واتجاه الرياح', 'تحديد نوع التربة الزراعية'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_2', type: 'why_explain', text: 'بما تفسر: أهمية دوائر العرض في دراسة الأرض؟', options: ['تحديد الموقع الفلكي ومعرفة الأقاليم المناخية', 'حساب التوقيت اليومي بين الدول', 'تحديد المسافات البرية بدقة', 'معرفة اتجاهات السفن في البحار'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_3', type: 'why_explain', text: 'بما تفسر: تشرق الشمس على مدينة العريش قبل مدينة السلوم؟', options: ['لأن العريش تقع شرق السلوم وتدور الأرض من الغرب للشرق', 'لأن العريش أرفع مساحة من السلوم', 'بسبب اختلاف نوع التربة في المدينتين', 'لأن العريش أقرب لدائرة الاستواء'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_4', type: 'why_explain', text: 'بما تفسر: وقوع معظم مصر في الإقليم الصحراوي الحار؟', options: ['بسبب موقعها الفلكي بين دائرتي عرض 22 و 31.36 شمالاً', 'بسبب كثرة الغابات الاستوائية فيها', 'بسبب مرور خط جرينتش في وسطها', 'بسبب ارتفاع جبالها الشامخة'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_5', type: 'why_explain', text: 'بما تفسر: براعة المصريين القدماء في علم الفلك؟', options: ['لتوجيه المعابد وتحديد مواقيت الزراعة بدقة', 'لصناعة الأدوية والعقاقير الطبية', 'لبناء السفن الحربية العابرة للبحار', 'لرسم الخرائط السياسية للدول'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_6', type: 'why_explain', text: 'بما تفسر: تصغر دوائر العرض تدريجياً كلما اتجهنا نحو القطبين؟', options: ['بسبب كروية الأرض وتناقص محيطها باتجاه الأطراف', 'بسبب ذوبان الجليد في القطب الشمالي', 'بسبب سرعة دوران الأرض حول محورها', 'بسبب زيادة خطوط الطول في تلك المناطق'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_7', type: 'why_explain', text: 'بما تفسر: اختلاف التوقيت بين المدن والمحافظات المختلفة؟', options: ['بسبب دوران الأرض حول محورها أمام الشمس واختلاف خطوط الطول', 'بسبب تباين مساحة المحافظات عن بعضها', 'بسبب اختلاف دوائر العرض لكل مدينة', 'بسبب قرب وبُعد المحافظات عن نهر النيل'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_8', type: 'why_explain', text: 'بما تفسر: أهمية شبكة الإحداثيات للمسافرين والمستكشفين؟', options: ['تساعد في تحديد المواقع بدقة على سطح الأرض وسهولة السفر', 'تستخدم لمعرفة حالة الطقس المتوقعة غداً', 'تساعد في حساب تكلفة الرحلات السياحية', 'تحدد أسعار العملات العالمية'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_9', type: 'why_explain', text: 'بما تفسر: عدم تساوي أطوال خطوط الطول على الكرة الأرضية؟', options: ['خطوط الطول متساوية وليست غير متساوية في طولها (أنصاف دوائر متساوية)', 'لأن الأرض مسطحة وليست كروية', 'بسبب اختلاف درجات الحرارة بين الشرق والغرب', 'بسبب ميل محور الأرض أثناء الدوران'], correct: 0, points: 1, image: '' },
+            { id: 'q_why_10', type: 'why_explain', text: 'بما تفسر: أهمية دائرة الاستواء في التقسيم المناخي؟', options: ['لأنها أوسع الدوائر وتعتمد عليها المناطق الحرارية كمرجع أساسي', 'لأنها تحدد طول النهار والليل بدقة متناهية', 'لأنها تفصل بين نصف الكرة الشرقي والغربي', 'لأنها تحسب فروق التوقيت بالدقائق'], correct: 0, points: 1, image: '' }
         ];
 
         let DB = {
@@ -1014,7 +1034,6 @@
                 true_false: 'صح أو خطأ',
                 complete: 'أكمل العبارة',
                 error_correction: 'تصويب الخطأ',
-                what_results: 'ما النتائج المترتبة على',
                 why_explain: 'بما تفسر'
             };
             document.getElementById('quiz-q-type').innerText = typeLabels[q.type] || 'سؤال';
@@ -1327,7 +1346,7 @@
             DB.config.subject = document.getElementById('admin-input-subject').value.trim();
             DB.config.teacherName = document.getElementById('admin-input-teacher').value.trim();
             DB.config.teacherPhone = document.getElementById('admin-input-phone').value.trim();
-            DB.config.durationMinutes = parseInt(document.getElementById('admin-input-duration').value) || 30;
+            DB.config.durationMinutes = parseInt(document.getElementById('admin-input-duration').value) || 40;
             DB.config.bannerUrl = NEW_BANNER_URL;
             DB.config.status = document.getElementById('admin-input-status').value;
 

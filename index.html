@@ -29,10 +29,10 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         .glass-modal {
-            background: rgba(15, 10, 30, 0.96);
+            background: rgba(15, 10, 30, 0.98);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(192, 132, 252, 0.3);
+            border: 1px solid rgba(192, 132, 252, 0.35);
         }
         .btn-3d {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -80,8 +80,13 @@
                     </button>
                 </div>
 
+                <!-- Safe Banner Display with fallback -->
                 <div class="w-full max-h-56 sm:max-h-64 rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-lg bg-slate-900 flex justify-center items-center">
-                    <img id="display-quiz-banner" src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" alt="واجهة الاختبار" class="w-full h-full object-cover">
+                    <img id="display-quiz-banner" 
+                         src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" 
+                         onerror="this.src='https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop'"
+                         alt="واجهة الاختبار" 
+                         class="w-full h-full object-cover">
                 </div>
 
                 <h1 id="display-quiz-title" class="text-2xl sm:text-3xl font-black text-purple-200 text-glow leading-snug mb-2 wrap-safe">
@@ -281,10 +286,19 @@
                             <label class="block text-xs font-bold text-purple-200 mb-1">مدة الاختبار (بالدقائق)</label>
                             <input type="number" id="admin-input-duration" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
                         </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-bold text-purple-200 mb-1">رابط صورة واجهة الاختبار</label>
-                            <input type="text" id="admin-input-banner" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        
+                        <!-- Banner Image Control with Live Preview -->
+                        <div class="sm:col-span-2 space-y-2">
+                            <label class="block text-xs font-bold text-purple-200">رابط صورة واجهة الاختبار (رابط مباشر Direct Link)</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="admin-input-banner" oninput="previewBannerInput(this.value)" placeholder="https://i.ibb.co/.../banner.jpg" class="flex-1 bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                            </div>
+                            <div class="w-full h-32 rounded-xl bg-slate-900 border border-purple-500/30 overflow-hidden flex items-center justify-center p-1">
+                                <img id="admin-banner-preview" src="" alt="معاينة الصورة" class="max-h-full object-contain">
+                                <span id="admin-banner-fallback" class="text-xs text-slate-500">لا توجد صورة أو الرابط غير صالح</span>
+                            </div>
                         </div>
+
                         <div>
                             <label class="block text-xs font-bold text-purple-200 mb-1">حالة نشر الاختبار</label>
                             <select id="admin-input-status" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
@@ -392,15 +406,15 @@
 
                 <!-- TAB 4: BANNED -->
                 <div id="admin-tab-banned" class="admin-tab-content space-y-4 hidden text-right">
-                    <h4 class="font-bold text-sm text-red-400"><i class="fa-solid fa-ban ml-1"></i> قائمة الطلاب المحظورين</h4>
+                    <h4 class="font-bold text-sm text-red-400"><i class="fa-solid fa-ban ml-1"></i> قائمة الطلاب المحظورين ومن أتموا الاختبار</h4>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-right text-slate-300">
                             <thead class="bg-slate-900 border-b border-purple-500/30 text-purple-300">
                                 <tr>
                                     <th class="p-2.5">الاسم</th>
-                                    <th class="p-2.5">سبب الحظر</th>
-                                    <th class="p-2.5">وقت الحظر</th>
-                                    <th class="p-2.5">إجراء</th>
+                                    <th class="p-2.5">سبب الحظر / الحالة</th>
+                                    <th class="p-2.5">التوقيت</th>
+                                    <th class="p-2.5">إجراء الإدارة</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-banned-tbody" class="divide-y divide-slate-800"></tbody>
@@ -437,7 +451,7 @@
 
     </div>
 
-    <!-- MODALS -->
+    <!-- MODAL 1: PASSCODE -->
     <div id="modal-passcode" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
         <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
             <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-2xl mx-auto flex items-center justify-center text-xl">
@@ -453,6 +467,7 @@
         </div>
     </div>
 
+    <!-- MODAL 2: READY PROMPT -->
     <div id="modal-ready" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
         <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
             <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl mx-auto flex items-center justify-center text-xl">
@@ -471,14 +486,44 @@
         </div>
     </div>
 
+    <!-- MODAL 3: ELEGANT PREVIOUS ATTEMPT & BAN CARD -->
+    <div id="modal-student-blocked" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden">
+        <div class="glass-modal rounded-3xl p-6 max-w-md w-full text-center space-y-5 border border-purple-500/40 shadow-2xl">
+            <div class="w-14 h-14 bg-amber-500/20 text-amber-400 rounded-3xl mx-auto flex items-center justify-center text-2xl border border-amber-500/30">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+                <h3 class="font-black text-xl text-white mb-1" id="blocked-modal-title">تنبيه أداء الاختبار</h3>
+                <p class="text-xs text-purple-200 leading-relaxed" id="blocked-modal-msg">لقد قمت بأداء هذا الاختبار مسبقاً.</p>
+            </div>
+
+            <!-- Score badge if available -->
+            <div id="blocked-modal-scorebox" class="bg-purple-950/80 p-4 rounded-2xl border border-purple-500/30 space-y-2 text-right">
+                <div class="flex justify-between text-xs"><span class="text-purple-300">اسم الطالب:</span> <span class="font-bold text-white" id="blocked-student-name">-</span></div>
+                <div class="flex justify-between text-xs"><span class="text-purple-300">الدرجة المحققة:</span> <span class="font-bold text-emerald-400 font-mono" id="blocked-student-score">-</span></div>
+                <div class="flex justify-between text-xs"><span class="text-purple-300">النسبة المئوية:</span> <span class="font-bold text-purple-300 font-mono" id="blocked-student-percent">-</span></div>
+                <div class="flex justify-between text-xs"><span class="text-purple-300">توقيت الاختبار:</span> <span class="text-slate-400 font-mono text-[11px]" id="blocked-student-time">-</span></div>
+            </div>
+
+            <div class="text-[11px] text-amber-300 bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
+                <i class="fa-solid fa-lock ml-1"></i> لإعادة أداء الاختبار مرة أخرى، يرجى مراجعة المعلمة لفك القيد من لوحة الإدارة.
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="closeBlockedModal()" class="w-full bg-purple-700 hover:bg-purple-600 text-white py-3 rounded-xl text-xs font-bold transition">حسناً، فهمت</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ADMIN LOGIN (Secure & Empty) -->
     <div id="modal-admin-auth" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
         <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
             <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-2xl mx-auto flex items-center justify-center text-xl">
                 <i class="fa-solid fa-lock"></i>
             </div>
             <h3 class="font-bold text-lg text-white">دخول لوحة إدارة الصف الخامس</h3>
-            <p class="text-xs text-purple-300">أدخل الرقم السري الإداري الخاص بمس رشا</p>
-            <input type="password" id="admin-passcode-input" placeholder="330399" class="w-full bg-slate-900 border border-purple-500/40 p-3 rounded-2xl text-center text-base font-mono text-white tracking-wider focus:outline-none focus:border-purple-400">
+            <p class="text-xs text-purple-300">أدخل الرقم السري الإداري</p>
+            <input type="password" id="admin-passcode-input" autocomplete="new-password" placeholder="••••••••" class="w-full bg-slate-900 border border-purple-500/40 p-3 rounded-2xl text-center text-base font-mono text-white tracking-wider focus:outline-none focus:border-purple-400">
             <div class="flex gap-2">
                 <button onclick="closeAdminModal()" class="w-1/2 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">إلغاء</button>
                 <button onclick="verifyAdminLogin()" class="w-1/2 bg-purple-600 hover:bg-purple-500 text-white py-2.5 rounded-xl text-xs font-bold">دخول</button>
@@ -488,19 +533,14 @@
 
     <!-- SCRIPT ENGINE -->
     <script>
-        // GOOGLE APPS SCRIPT CLOUD ENDPOINT FOR GRADE 5
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
         // Web Audio Synthesizer
         let audioCtx = null;
         function initAudio() {
             try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
             } catch(e) {}
         }
 
@@ -555,7 +595,6 @@
             } catch(e) {}
         }
 
-        // Central Database for Grade 5
         const DEFAULT_CONFIG = {
             testId: 'exam_soc_05',
             title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
@@ -621,6 +660,11 @@
             results: []
         };
 
+        let currentStudent = null;
+        let activeAttempt = null;
+        let timerInterval = null;
+        let isPreviewMode = false;
+
         async function fetchCloudData() {
             try {
                 const response = await fetch(GOOGLE_SCRIPT_URL);
@@ -647,6 +691,7 @@
                 }
             } finally {
                 initApp();
+                checkActiveResumeSession();
             }
         }
 
@@ -661,11 +706,6 @@
                 });
             } catch(e) {}
         }
-
-        let currentStudent = null;
-        let activeAttempt = null;
-        let timerInterval = null;
-        let isPreviewMode = false;
 
         function showToast(msg, icon = 'fa-circle-info', isError = false) {
             const toast = document.getElementById('toast');
@@ -693,7 +733,9 @@
             document.getElementById('display-quiz-title').innerText = DB.config.title;
             document.getElementById('display-teacher-name').innerText = DB.config.teacherName;
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
-            document.getElementById('display-quiz-banner').src = DB.config.bannerUrl;
+            
+            const banner = document.getElementById('display-quiz-banner');
+            banner.src = DB.config.bannerUrl || 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
 
             const badge = document.getElementById('display-badge-status');
             if (DB.config.status === 'published') {
@@ -717,9 +759,43 @@
             });
         }
 
-        function getTodayDateString() {
-            const d = new Date();
-            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        // --- ANTI-CHEAT & REFRESH RECOVERY ENGINE ---
+        function checkActiveResumeSession() {
+            const savedAttempt = localStorage.getItem('grade5_active_attempt');
+            if (savedAttempt) {
+                try {
+                    const parsed = JSON.parse(savedAttempt);
+                    if (parsed && !parsed.isCompleted && parsed.timeRemaining > 0) {
+                        activeAttempt = parsed;
+                        currentStudent = DB.students.find(s => s.id === activeAttempt.studentId) || { id: activeAttempt.studentId, name: activeAttempt.studentName };
+                        
+                        document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
+                        document.getElementById('quiz-header-student').innerText = currentStudent.name;
+
+                        navigateTo('screen-quiz');
+                        renderCurrentQuestion();
+                        startQuizTimer();
+                        showToast('تم استئناف اختبارك تلقائياً.', 'fa-clock-rotate-left');
+                    }
+                } catch(e) {}
+            }
+        }
+
+        window.addEventListener('beforeunload', function (e) {
+            if (activeAttempt && !activeAttempt.isCompleted && !isPreviewMode) {
+                e.preventDefault();
+                e.returnValue = 'أنت في منتصف الاختبار، الرجاء عدم مغادرة الصفحة!';
+            }
+        });
+
+        function saveActiveAttemptState() {
+            if (!isPreviewMode && activeAttempt && !activeAttempt.isCompleted) {
+                localStorage.setItem('grade5_active_attempt', JSON.stringify(activeAttempt));
+            }
+        }
+
+        function clearActiveAttemptState() {
+            localStorage.removeItem('grade5_active_attempt');
         }
 
         function handleStartClick() {
@@ -733,8 +809,9 @@
             const student = DB.students.find(s => s.id === studentId);
             if (!student) return;
 
+            // Check if student is banned or already completed test
             if (student.isBanned) {
-                showToast(`أنت محظور من أداء الاختبار. السبب: ${student.banReason || 'مخالفة التعليمات'}`, 'fa-ban', true);
+                openBlockedModal(student);
                 return;
             }
 
@@ -743,19 +820,34 @@
                 return;
             }
 
-            const today = getTodayDateString();
-            const existingResult = DB.results.find(r => r.studentId === student.id && r.dateString === today);
-            if (existingResult) {
-                if (confirm('لقد أديت هذا الاختبار اليوم بالفعل. لا يسمح بأداء الاختبار أكثر من مرة واحدة خلال اليوم.\n\nهل ترغب في عرض نتيجتك السابقة؟')) {
-                    displayResultScreen(existingResult);
-                }
-                return;
-            }
-
             currentStudent = student;
             document.getElementById('passcode-student-label').innerText = `الطالب: ${student.name}`;
             document.getElementById('student-passcode-input').value = '';
             document.getElementById('modal-passcode').classList.remove('hidden');
+        }
+
+        function openBlockedModal(student) {
+            const lastRes = DB.results.slice().reverse().find(r => r.studentId === student.id);
+            document.getElementById('blocked-student-name').innerText = student.name;
+            
+            if (lastRes) {
+                document.getElementById('blocked-modal-title').innerText = 'تم أداء الاختبار بنجاح مسبقاً';
+                document.getElementById('blocked-modal-msg').innerText = 'لقد قمت بإتمام هذا الاختبار، وهذه بيانات نتيجتك السابقة:';
+                document.getElementById('blocked-student-score').innerText = `${lastRes.score} من ${lastRes.totalPoints}`;
+                document.getElementById('blocked-student-percent').innerText = `${lastRes.percent}%`;
+                document.getElementById('blocked-student-time').innerText = lastRes.dateTime;
+                document.getElementById('blocked-modal-scorebox').classList.remove('hidden');
+            } else {
+                document.getElementById('blocked-modal-title').innerText = 'حساب الطالب مقيد مؤقتاً';
+                document.getElementById('blocked-modal-msg').innerText = `السبب المسجل: ${student.banReason || 'مخالفة تعليمات الاختبار'}`;
+                document.getElementById('blocked-modal-scorebox').classList.add('hidden');
+            }
+            document.getElementById('modal-student-blocked').classList.remove('hidden');
+        }
+
+        function closeBlockedModal() {
+            playSound('click');
+            document.getElementById('modal-student-blocked').classList.add('hidden');
         }
 
         function closePasscodeModal() {
@@ -820,6 +912,8 @@
                 timeRemaining: DB.config.durationMinutes * 60,
                 isCompleted: false
             };
+
+            saveActiveAttemptState();
 
             document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
             document.getElementById('quiz-header-student').innerText = currentStudent.name;
@@ -910,6 +1004,8 @@
             }
 
             activeAttempt.currentIndex++;
+            saveActiveAttemptState();
+
             if (activeAttempt.currentIndex < activeAttempt.questions.length) {
                 setTimeout(renderCurrentQuestion, 250);
             } else {
@@ -921,6 +1017,8 @@
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 activeAttempt.timeRemaining--;
+                saveActiveAttemptState();
+
                 const m = Math.floor(activeAttempt.timeRemaining / 60);
                 const s = activeAttempt.timeRemaining % 60;
                 document.getElementById('quiz-timer').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
@@ -940,6 +1038,7 @@
         async function finishQuiz(isTimeOut = false) {
             clearInterval(timerInterval);
             activeAttempt.isCompleted = true;
+            clearActiveAttemptState();
 
             let totalPoints = 0;
             let earnedScore = 0;
@@ -986,7 +1085,6 @@
                 studentId: currentStudent.id,
                 studentName: currentStudent.name,
                 examTitle: DB.config.title,
-                dateString: getTodayDateString(),
                 dateTime: new Date().toLocaleString('ar-EG'),
                 score: earnedScore,
                 totalPoints: totalPoints,
@@ -999,7 +1097,17 @@
             };
 
             if (!isPreviewMode) {
+                // 1. Record Result
                 DB.results.push(resultObj);
+                
+                // 2. Automatically Ban Student to lock repeating
+                const targetStudent = DB.students.find(s => s.id === currentStudent.id);
+                if (targetStudent) {
+                    targetStudent.isBanned = true;
+                    targetStudent.banReason = 'تم أداء الاختبار بنجاح (مغلق تلقائياً)';
+                    targetStudent.banTime = new Date().toLocaleString('ar-EG');
+                }
+
                 await saveDatabase();
             }
 
@@ -1059,10 +1167,11 @@
             navigateTo('screen-result');
         }
 
-        // --- ADMIN PANEL METHODS ---
+        // --- ADMIN PANEL LOGIC ---
         function openAdminModal() {
             playSound('click');
-            document.getElementById('admin-passcode-input').value = '';
+            const inp = document.getElementById('admin-passcode-input');
+            inp.value = ''; // Clean up instantly
             document.getElementById('modal-admin-auth').classList.remove('hidden');
         }
 
@@ -1100,6 +1209,23 @@
             document.getElementById(`admin-tab-btn-${tabName}`).className = 'admin-tab-btn px-4 py-2.5 rounded-xl bg-purple-600 text-white whitespace-nowrap';
         }
 
+        function previewBannerInput(url) {
+            const prev = document.getElementById('admin-banner-preview');
+            const fallback = document.getElementById('admin-banner-fallback');
+            if (url && url.trim().length > 5) {
+                prev.src = url.trim();
+                prev.classList.remove('hidden');
+                fallback.classList.add('hidden');
+                prev.onerror = () => {
+                    prev.classList.add('hidden');
+                    fallback.classList.remove('hidden');
+                };
+            } else {
+                prev.classList.add('hidden');
+                fallback.classList.remove('hidden');
+            }
+        }
+
         function loadAdminData() {
             document.getElementById('admin-input-title').value = DB.config.title;
             document.getElementById('admin-input-grade').value = DB.config.grade;
@@ -1110,6 +1236,8 @@
             document.getElementById('admin-input-banner').value = DB.config.bannerUrl;
             document.getElementById('admin-input-status').value = DB.config.status;
             document.getElementById('admin-input-newpass').value = '';
+
+            previewBannerInput(DB.config.bannerUrl);
 
             renderAdminQuestions();
             renderAdminStudents();
@@ -1266,9 +1394,9 @@
                     <td class="p-2.5 font-mono">${s.id}</td>
                     <td class="p-2.5 font-bold text-white">${s.name}</td>
                     <td class="p-2.5 font-mono text-purple-300">${s.passcode}</td>
-                    <td class="p-2.5">${s.isBanned ? '<span class="text-red-400 font-bold">محظور</span>' : '<span class="text-emerald-400">نشط</span>'}</td>
+                    <td class="p-2.5">${s.isBanned ? '<span class="text-amber-400 font-bold">مقيد / أتم الاختبار</span>' : '<span class="text-emerald-400">متاح للاختبار</span>'}</td>
                     <td class="p-2.5 flex gap-2">
-                        <button onclick="toggleBanStudent('${s.id}')" class="text-xs ${s.isBanned ? 'text-emerald-400' : 'text-amber-400'}">${s.isBanned ? 'فك الحظر' : 'حظر'}</button>
+                        <button onclick="toggleBanStudent('${s.id}')" class="text-xs ${s.isBanned ? 'text-emerald-400 font-bold' : 'text-amber-400'}">${s.isBanned ? 'فك القيد' : 'حظر'}</button>
                         <button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400 hover:underline">حذف</button>
                     </td>
                 `;
@@ -1313,6 +1441,7 @@
                 s.isBanned = false;
                 s.banReason = '';
                 s.banTime = '';
+                showToast(`تم فك الحظر عن الطالب ${s.name} بنجاح، يمكنه الآن دخول الاختبار مرة أخرى.`, 'fa-circle-check');
             }
             await saveDatabase();
             renderAdminStudents();
@@ -1335,7 +1464,7 @@
             const banned = DB.students.filter(s => s.isBanned);
 
             if (banned.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">لا يوجد طلاب محظورون حالياً.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">لا يوجد طلاب محظورون أو مقيدون حالياً.</td></tr>';
                 return;
             }
 
@@ -1343,9 +1472,9 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="p-2.5 font-bold text-white">${s.name}</td>
-                    <td class="p-2.5 text-red-300">${s.banReason || 'بدون سبب'}</td>
-                    <td class="p-2.5 text-slate-400 font-mono">${s.banTime}</td>
-                    <td class="p-2.5"><button onclick="toggleBanStudent('${s.id}')" class="bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-2 py-1 rounded-lg text-[11px]">فك الحظر</button></td>
+                    <td class="p-2.5 text-amber-300">${s.banReason || 'أتم الاختبار'}</td>
+                    <td class="p-2.5 text-slate-400 font-mono text-[11px]">${s.banTime}</td>
+                    <td class="p-2.5"><button onclick="toggleBanStudent('${s.id}')" class="bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-3 py-1 rounded-lg text-xs font-bold hover:bg-emerald-600/50">فك الحظر وإتاحة الاختبار</button></td>
                 `;
                 tbody.appendChild(tr);
             });

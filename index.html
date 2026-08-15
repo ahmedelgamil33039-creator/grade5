@@ -550,12 +550,12 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
-        // ELEGANT & SUBTLE UI AUDIO SOUNDS (أصوات تفاعلية هادئة، احترافية وبدون أي وش)
+        // REAL SCHOOLROOM APPLAUSE & GENTLE EDUCATIONAL SOUNDS (تصفيق طلاب داخل فصل + نغمة هادئة جداً للخطأ)
         const AUDIO_BANK = {
             click: new Audio("https://cdn.freesound.org/previews/256/256113_3263906-lq.mp3"),
-            correct: new Audio("https://cdn.freesound.org/previews/320/320655_5260872-lq.mp3"), // رنة نجاح هادئة وأنيقة جداً (Gentle Bell Chime)
-            wrong: new Audio("https://cdn.freesound.org/previews/142/142608_1840739-lq.mp3"),   // نغمة تنبيه لطيفة للخطأ (Soft Error Ding)
-            fanfare: new Audio("https://cdn.freesound.org/previews/270/270319_5123851-lq.mp3")  // نغمة إتمام أنيقة ومبهجة
+            correct: new Audio("https://cdn.freesound.org/previews/387/387232_1474204-lq.mp3"), // تصفيق طلاب هادئ داخل قاعة وفصل مدرسي (Gentle Classroom Applause)
+            wrong: new Audio("https://cdn.freesound.org/previews/142/142608_1840739-lq.mp3"),   // نغمة لطيفة وخافتة تدل على الخطأ بدون أي إزعاج
+            fanfare: new Audio("https://cdn.freesound.org/previews/387/387232_1474204-lq.mp3")  // تصفيق فصل مدرسي لتشجيع الطلاب
         };
 
         let audioUnlocked = false;
@@ -563,7 +563,7 @@
             if (audioUnlocked) return;
             audioUnlocked = true;
             Object.values(AUDIO_BANK).forEach(a => {
-                a.volume = 0.6;
+                a.volume = 0.5; // مستوى صوت ناعم ومريح
                 a.load();
             });
         }

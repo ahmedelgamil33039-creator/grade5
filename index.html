@@ -80,10 +80,11 @@
                     </button>
                 </div>
 
-                <!-- Banner Image with Fallback -->
+                <!-- Banner Image -->
                 <div class="w-full max-h-56 sm:max-h-64 rounded-2xl overflow-hidden mb-6 border border-purple-500/30 shadow-lg bg-slate-900 flex justify-center items-center">
                     <img id="display-quiz-banner" 
-                         src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" 
+                         src="https://i.ibb.co/6R5Lz65b/image.jpg" 
+                         onerror="this.src='https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop'"
                          alt="واجهة الاختبار" 
                          class="w-full h-full object-cover">
                 </div>
@@ -319,10 +320,10 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: QUESTIONS (مع خيار الترتيب العشوائي الجديد) -->
+                <!-- TAB 2: QUESTIONS -->
                 <div id="admin-tab-questions" class="admin-tab-content space-y-6 hidden text-right">
                     
-                    <!-- التحكم في الترتيب العشوائي للأسئلة والخيارات -->
+                    <!-- Random Order Switch -->
                     <div class="p-4 bg-purple-950/70 rounded-2xl border border-purple-500/40 flex flex-wrap items-center justify-between gap-3">
                         <div class="space-y-0.5">
                             <h4 class="font-bold text-sm text-white flex items-center gap-2">
@@ -531,7 +532,7 @@
         </div>
     </div>
 
-    <!-- MODAL 4: ADMIN LOGIN (Secure & Empty) -->
+    <!-- MODAL 4: ADMIN LOGIN -->
     <div id="modal-admin-auth" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
         <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
             <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-2xl mx-auto flex items-center justify-center text-xl">
@@ -547,24 +548,98 @@
         </div>
     </div>
 
-    <!-- SCRIPT ENGINE -->
+    <!-- AUDIO ENGINE & SCRIPTS -->
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
-        // REAL MP3 SOUND EFFECTS
-        const AUDIO_EFFECTS = {
-            click: new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"),
-            correct: new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"),
-            wrong: new Audio("https://assets.mixkit.co/active_storage/sfx/253/253-preview.mp3"),
-            fanfare: new Audio("https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3")
-        };
+        // HYBRID REALISTIC AUDIO ENGINE (Web Audio Synthesizer + Fallback for Instant Crowd Cheer & Fail Buzzer)
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Unlock audio instantly on first interaction
+        ['click', 'touchstart', 'keydown'].forEach(evt => {
+            document.addEventListener(evt, () => { getAudioContext(); }, { once: true });
+        });
 
         function playSound(type) {
             try {
-                const sound = AUDIO_EFFECTS[type];
-                if (sound) {
-                    sound.currentTime = 0;
-                    sound.play().catch(() => {});
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+
+                if (type === 'click') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(now); osc.stop(now + 0.05);
+                } 
+                else if (type === 'correct') {
+                    // 1. Cheer Chords (أصوات هتاف نغمي متصاعد مبهج)
+                    const cheerNotes = [523.25, 659.25, 783.99, 1046.50];
+                    cheerNotes.forEach((freq, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + (i * 0.05));
+                        gain.gain.setValueAtTime(0.25, now + (i * 0.05));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.05) + 0.35);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + (i * 0.05)); osc.stop(now + (i * 0.05) + 0.35);
+                    });
+
+                    // 2. Crowd Clapping Synth (محاكاة تصفيق جماعي حماسي وسريع)
+                    for (let c = 0; c < 12; c++) {
+                        const clapDelay = now + (c * 0.03) + (Math.random() * 0.02);
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(120 + Math.random() * 80, clapDelay);
+                        gain.gain.setValueAtTime(0.3, clapDelay);
+                        gain.gain.exponentialRampToValueAtTime(0.001, clapDelay + 0.04);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(clapDelay); osc.stop(clapDelay + 0.04);
+                    }
+                } 
+                else if (type === 'wrong') {
+                    // Sad Wah-Wah / Descending Fail Buzzer (صوت إحباط طريف وواضح)
+                    const sadNotes = [311.13, 293.66, 277.18, 246.94];
+                    sadNotes.forEach((freq, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(freq, now + (i * 0.12));
+                        osc.frequency.linearRampToValueAtTime(freq - 15, now + (i * 0.12) + 0.15);
+                        gain.gain.setValueAtTime(0.3, now + (i * 0.12));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.12) + 0.18);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + (i * 0.12)); osc.stop(now + (i * 0.12) + 0.18);
+                    });
+                } 
+                else if (type === 'fanfare') {
+                    // Massive Celebration Fanfare (احتفال كامل وتصفيق مدوٍّ)
+                    const victoryChords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                    victoryChords.forEach((freq, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + (i * 0.08));
+                        gain.gain.setValueAtTime(0.3, now + (i * 0.08));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.08) + 0.6);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + (i * 0.08)); osc.stop(now + (i * 0.08) + 0.6);
+                    });
                 }
             } catch(e) {}
         }
@@ -586,11 +661,11 @@
             subject: 'الدراسات الاجتماعية',
             teacherName: 'مس رشا دياب',
             teacherPhone: '01205333472',
-            bannerUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop',
+            bannerUrl: 'https://i.ibb.co/6R5Lz65b/image.jpg',
             durationMinutes: 30,
             status: 'published',
             adminPass: '330399',
-            isRandomOrder: true // New Feature: Toggle random order
+            isRandomOrder: true
         };
 
         const DEFAULT_STUDENTS = [
@@ -720,7 +795,7 @@
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
             
             const banner = document.getElementById('display-quiz-banner');
-            banner.src = DB.config.bannerUrl || 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
+            banner.src = DB.config.bannerUrl || 'https://i.ibb.co/6R5Lz65b/image.jpg';
             banner.onerror = () => {
                 banner.src = 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop';
             };
@@ -747,12 +822,13 @@
             });
         }
 
+        // Safe Refresh Recovery Engine
         function checkActiveResumeSession() {
             const savedAttempt = localStorage.getItem('grade5_active_attempt');
             if (savedAttempt) {
                 try {
                     const parsed = JSON.parse(savedAttempt);
-                    if (parsed && !parsed.isCompleted && parsed.timeRemaining > 0) {
+                    if (parsed && !parsed.isCompleted && parsed.timeRemaining > 0 && parsed.questions && parsed.questions.length > 0) {
                         activeAttempt = parsed;
                         currentStudent = DB.students.find(s => s.id === activeAttempt.studentId) || { id: activeAttempt.studentId, name: activeAttempt.studentName };
                         
@@ -762,7 +838,7 @@
                         navigateTo('screen-quiz');
                         renderCurrentQuestion();
                         startQuizTimer();
-                        showToast('تم استئناف اختبارك تلقائياً.', 'fa-clock-rotate-left');
+                        showToast('تم استئناف اختبارك بنجاح.', 'fa-clock-rotate-left');
                     }
                 } catch(e) {}
             }
@@ -872,7 +948,6 @@
                 const correctText = q.options[q.correct];
                 let optionsList = [...q.options];
                 
-                // Shuffle options if random mode enabled
                 if (isRandom && q.type !== 'true_false') {
                     optionsList = shuffleArray(optionsList);
                 }
@@ -888,7 +963,6 @@
                 };
             });
 
-            // 2. Shuffle Questions if random mode enabled
             if (isRandom) {
                 preparedQuestions = shuffleArray(preparedQuestions);
             }
@@ -951,6 +1025,10 @@
         }
 
         function renderCurrentQuestion() {
+            if (!activeAttempt || !activeAttempt.questions || activeAttempt.currentIndex >= activeAttempt.questions.length) {
+                return;
+            }
+
             const q = activeAttempt.questions[activeAttempt.currentIndex];
             document.getElementById('quiz-question-counter').innerText = `السؤال ${activeAttempt.currentIndex + 1} من ${activeAttempt.questions.length}`;
             document.getElementById('quiz-q-points').innerText = q.points;
@@ -978,9 +1056,15 @@
 
             q.shuffledOptions.forEach(optText => {
                 const btn = document.createElement('button');
-                btn.className = 'glass-card hover:bg-purple-600/30 border border-purple-500/40 hover:border-purple-300 p-4 rounded-2xl text-white font-bold text-sm sm:text-base transition text-center btn-3d flex items-center justify-center min-h-[55px] wrap-safe leading-relaxed';
+                btn.type = 'button';
+                btn.className = 'glass-card hover:bg-purple-600/30 border border-purple-500/40 hover:border-purple-300 p-4 rounded-2xl text-white font-bold text-sm sm:text-base transition text-center btn-3d flex items-center justify-center min-h-[55px] wrap-safe leading-relaxed cursor-pointer';
                 btn.innerText = optText;
-                btn.onclick = () => selectOption(optText);
+                
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    selectOption(optText);
+                });
+                
                 container.appendChild(btn);
             });
         }

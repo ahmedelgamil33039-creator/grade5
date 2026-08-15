@@ -148,6 +148,10 @@
                     </h2>
                 </div>
 
+                <div id="quiz-q-image-wrap" class="hidden w-full max-h-56 rounded-xl overflow-hidden bg-slate-900 border border-purple-500/30 flex justify-center items-center">
+                    <img id="quiz-q-image" src="" alt="صورة السؤال" class="max-h-56 object-contain">
+                </div>
+
                 <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
 
                 <div class="pt-4 border-t border-purple-500/30 flex justify-end">
@@ -161,7 +165,7 @@
         <!-- SCREEN 3: RESULTS SCREEN -->
         <section id="screen-result" class="w-full space-y-6 hidden">
             <div class="glass-card rounded-3xl p-6 sm:p-8 text-center border border-purple-500/40 space-y-6">
-                <div id="result-status-icon" class="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                <div id="result-status-icon" class="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl">
                     <i class="fa-solid fa-trophy"></i>
                 </div>
 
@@ -176,6 +180,25 @@
                     <div class="text-sm font-bold text-emerald-400 mt-2" id="result-percent">النسبة المئوية: 0%</div>
                 </div>
 
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-right">
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-2xl">
+                        <span class="text-xs text-emerald-400 block font-bold">الإجابات الصحيحة</span>
+                        <span class="text-xl font-bold text-white font-mono" id="result-stat-correct">0</span>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-500/20 p-3 rounded-2xl">
+                        <span class="text-xs text-red-400 block font-bold">الإجابات الخاطئة</span>
+                        <span class="text-xl font-bold text-white font-mono" id="result-stat-wrong">0</span>
+                    </div>
+                    <div class="bg-amber-500/10 border border-amber-500/20 p-3 rounded-2xl">
+                        <span class="text-xs text-amber-400 block font-bold">غير مجاب</span>
+                        <span class="text-xl font-bold text-white font-mono" id="result-stat-unanswered">0</span>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/20 p-3 rounded-2xl">
+                        <span class="text-xs text-purple-300 block font-bold">إجمالي الأسئلة</span>
+                        <span class="text-xl font-bold text-white font-mono" id="result-stat-total">0</span>
+                    </div>
+                </div>
+
                 <div class="text-right space-y-3 pt-4">
                     <h3 class="text-base font-bold text-purple-300"><i class="fa-solid fa-list-check ml-2"></i> تفاصيل الإجابات:</h3>
                     <div id="result-breakdown" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
@@ -187,7 +210,7 @@
             </div>
         </section>
 
-        <!-- SCREEN 4: COMPLETE ADMIN DASHBOARD -->
+        <!-- SCREEN 4: COMPLETE ADVANCED ADMIN DASHBOARD -->
         <section id="screen-admin" class="w-full space-y-6 hidden">
             <div class="glass-card rounded-3xl p-6 border border-purple-500/40 space-y-6">
                 
@@ -198,12 +221,15 @@
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
                         <div>
-                            <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي</h2>
-                            <p class="text-xs text-purple-300">إدارة أسئلة وطلاب وإعدادات الصف الخامس</p>
+                            <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي المتقدمة</h2>
+                            <p class="text-xs text-purple-300">متصلة سحابياً ومحلياً بكامل الصلاحيات</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-4 py-2 rounded-xl transition">
+                        <button onclick="previewQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye"></i> معاينة
+                        </button>
+                        <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-2 rounded-xl transition">
                             <i class="fa-solid fa-arrow-right-from-bracket ml-1"></i> خروج
                         </button>
                     </div>
@@ -219,6 +245,9 @@
                     </button>
                     <button onclick="switchAdminTab('students')" id="admin-tab-btn-students" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">
                         <i class="fa-solid fa-users ml-1"></i> إدارة الطلاب
+                    </button>
+                    <button onclick="switchAdminTab('banned')" id="admin-tab-btn-banned" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">
+                        <i class="fa-solid fa-ban ml-1"></i> المحظورون
                     </button>
                     <button onclick="switchAdminTab('results')" id="admin-tab-btn-results" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">
                         <i class="fa-solid fa-square-poll-vertical ml-1"></i> النتائج والتقارير
@@ -256,11 +285,23 @@
                             <label class="block text-xs font-bold text-purple-200 mb-1">رابط صورة واجهة الاختبار</label>
                             <input type="text" id="admin-input-banner" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
                         </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">حالة نشر الاختبار</label>
+                            <select id="admin-input-status" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                                <option value="published">منشور للطلاب</option>
+                                <option value="draft">مسودة (غير متاح)</option>
+                                <option value="closed">مغلق</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-200 mb-1">الرقم السري الجديد للإدارة</label>
+                            <input type="password" id="admin-input-newpass" placeholder="اتركه فارغاً إن لم ترغب في التغيير" class="w-full bg-slate-900 border border-purple-500/40 p-2.5 rounded-xl text-sm text-white">
+                        </div>
                     </div>
 
                     <div class="pt-4">
                         <button onclick="saveAdminSettings()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">
-                            <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ التعديلات
+                            <i class="fa-solid fa-cloud-arrow-up ml-1"></i> حفظ وتحديث فوري
                         </button>
                     </div>
                 </div>
@@ -273,13 +314,15 @@
                         <div>
                             <label class="block text-xs text-purple-300 mb-1">نوع السؤال</label>
                             <select id="admin-q-type" onchange="handleQTypeChange()" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
-                                <option value="mcq">اختيار من متعدد</option>
+                                <option value="mcq">اختيار من أربعة</option>
                                 <option value="true_false">صح أو خطأ</option>
+                                <option value="complete">أكمل باختيار من أربعة</option>
+                                <option value="error_correction">اكتشف أو صوب الخطأ بأربعة اختيارات</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs text-purple-300 mb-1">نص السؤال</label>
-                            <textarea id="admin-q-text" rows="2" class="w-full bg-slate-800 border border-slate-700 p-2.5 rounded-xl text-sm text-white"></textarea>
+                            <textarea id="admin-q-text" rows="3" class="w-full bg-slate-800 border border-slate-700 p-2.5 rounded-xl text-sm text-white wrap-safe"></textarea>
                         </div>
                         <div id="admin-q-options-wrap" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <input type="text" id="admin-q-opt-0" placeholder="الخيار الأول (أ)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
@@ -287,7 +330,7 @@
                             <input type="text" id="admin-q-opt-2" placeholder="الخيار الثالث (ج)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
                             <input type="text" id="admin-q-opt-3" placeholder="الخيار الرابع (د)" class="bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             <div>
                                 <label class="block text-xs text-purple-300 mb-1">الإجابة الصحيحة</label>
                                 <select id="admin-q-correct" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
@@ -300,6 +343,10 @@
                             <div>
                                 <label class="block text-xs text-purple-300 mb-1">درجة السؤال</label>
                                 <input type="number" id="admin-q-points" value="1" min="1" class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-purple-300 mb-1">رابط صورة (اختياري)</label>
+                                <input type="text" id="admin-q-image" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 p-2 rounded-xl text-xs text-white">
                             </div>
                         </div>
                         <div class="flex gap-2 pt-2">
@@ -334,6 +381,7 @@
                                     <th class="p-2.5">المعرف</th>
                                     <th class="p-2.5">الاسم</th>
                                     <th class="p-2.5">الرقم السري</th>
+                                    <th class="p-2.5">الحالة</th>
                                     <th class="p-2.5">إجراءات</th>
                                 </tr>
                             </thead>
@@ -342,12 +390,30 @@
                     </div>
                 </div>
 
-                <!-- TAB 4: RESULTS -->
+                <!-- TAB 4: BANNED -->
+                <div id="admin-tab-banned" class="admin-tab-content space-y-4 hidden text-right">
+                    <h4 class="font-bold text-sm text-red-400"><i class="fa-solid fa-ban ml-1"></i> قائمة الطلاب المحظورين</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-right text-slate-300">
+                            <thead class="bg-slate-900 border-b border-purple-500/30 text-purple-300">
+                                <tr>
+                                    <th class="p-2.5">الاسم</th>
+                                    <th class="p-2.5">سبب الحظر</th>
+                                    <th class="p-2.5">وقت الحظر</th>
+                                    <th class="p-2.5">إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-banned-tbody" class="divide-y divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: RESULTS -->
                 <div id="admin-tab-results" class="admin-tab-content space-y-4 hidden text-right">
                     <div class="flex justify-between items-center">
                         <h4 class="font-bold text-sm text-purple-300">سجل نتائج طلاب الصف الخامس</h4>
                         <button onclick="exportResultsCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition">
-                            <i class="fa-solid fa-file-excel ml-1"></i> تصدير Excel
+                            <i class="fa-solid fa-file-excel ml-1"></i> تصدير Excel (CSV)
                         </button>
                     </div>
                     <div class="overflow-x-auto">
@@ -357,7 +423,9 @@
                                     <th class="p-2.5">الطالب</th>
                                     <th class="p-2.5">الدرجة</th>
                                     <th class="p-2.5">النسبة</th>
+                                    <th class="p-2.5">صواب/خطأ</th>
                                     <th class="p-2.5">التاريخ</th>
+                                    <th class="p-2.5">التفاصيل</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-results-tbody" class="divide-y divide-slate-800"></tbody>
@@ -402,7 +470,10 @@
 
     <!-- SCRIPT ENGINE -->
     <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby855wEYncAGqp9mv9uqYJG4JMluOlO8LmGMRh4V5_Fg4JjLXRznwzcFMX4T4LBHJITDw/exec";
+
         const DEFAULT_CONFIG = {
+            testId: 'exam_soc_05',
             title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
             grade: 'الصف الخامس الابتدائي',
             subject: 'الدراسات الاجتماعية',
@@ -410,13 +481,14 @@
             teacherPhone: '01205333472',
             bannerUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop',
             durationMinutes: 30,
+            status: 'published',
             adminPass: '330399'
         };
 
         const DEFAULT_STUDENTS = [
-            { id: 'std_501', name: 'عمر خالد', passcode: '1122' },
-            { id: 'std_502', name: 'فاطمة محمود', passcode: '3344' },
-            { id: 'std_503', name: 'يوسف حسام', passcode: '5566' }
+            { id: 'std_501', name: 'عمر خالد', passcode: '1122', isBanned: false, banReason: '', banTime: '' },
+            { id: 'std_502', name: 'فاطمة محمود', passcode: '3344', isBanned: false, banReason: '', banTime: '' },
+            { id: 'std_503', name: 'يوسف حسام', passcode: '5566', isBanned: false, banReason: '', banTime: '' }
         ];
 
         const DEFAULT_QUESTIONS = [
@@ -426,7 +498,8 @@
                 text: 'تعد خطوط الطول ودوائر العرض خطوطاً وهمية تفيد في تحديد الأماكن والتوقيت...',
                 options: ['الفلكي', 'الجغرافي', 'السطحي', 'المناخي'],
                 correct: 0,
-                points: 1
+                points: 1,
+                image: ''
             },
             {
                 id: 'q_502',
@@ -434,23 +507,26 @@
                 text: 'تشرق الشمس على الأماكن الواقعة شرق خط جرينتش قبل الأماكن الواقعة غربه.',
                 options: ['عبارة صحيحة', 'عبارة خاطئة'],
                 correct: 0,
-                points: 1
+                points: 1,
+                image: ''
             },
             {
                 id: 'q_503',
-                type: 'mcq',
+                type: 'complete',
                 text: 'تكونت دلتا نهر النيل في مصر نتيجة التعرية...',
                 options: ['المائية', 'الهوائية', 'الجليدية', 'البحرية'],
                 correct: 0,
-                points: 2
+                points: 2,
+                image: ''
             },
             {
                 id: 'q_504',
-                type: 'mcq',
-                text: 'يقع جبل سانت كاترين في...',
+                type: 'error_correction',
+                text: 'صوب الخطأ: يقع جبل سانت كاترين في الصحراء الغربية. التصويب هو أنه يقع في...',
                 options: ['شبه جزيرة سيناء', 'الصحراء الشرقية', 'وادي النيل', 'الدلتا'],
                 correct: 0,
-                points: 2
+                points: 2,
+                image: ''
             }
         ];
 
@@ -462,36 +538,28 @@
         };
 
         function loadLocalData() {
-            const saved = localStorage.getItem('grade5_full_db');
+            const saved = localStorage.getItem('grade5_master_db');
             if (saved) {
                 try { DB = JSON.parse(saved); } catch(e) {}
             }
         }
 
-        function saveLocalData() {
-            localStorage.setItem('grade5_full_db', JSON.stringify(DB));
+        async function saveDatabase() {
+            localStorage.setItem('grade5_master_db', JSON.stringify(DB));
+            try {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(DB)
+                });
+            } catch(e) {}
         }
 
         let currentStudent = null;
         let activeAttempt = null;
         let timerInterval = null;
-
-        function initApp() {
-            loadLocalData();
-            document.getElementById('display-quiz-title').innerText = DB.config.title;
-            document.getElementById('display-teacher-name').innerText = DB.config.teacherName;
-            document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
-            document.getElementById('display-quiz-banner').src = DB.config.bannerUrl;
-
-            const select = document.getElementById('select-student');
-            select.innerHTML = '<option value="">-- اختر اسمك من القائمة --</option>';
-            DB.students.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s.id;
-                opt.innerText = s.name;
-                select.appendChild(opt);
-            });
-        }
+        let isPreviewMode = false;
 
         function showToast(msg, icon = 'fa-circle-info', isError = false) {
             const toast = document.getElementById('toast');
@@ -515,14 +583,57 @@
             window.scrollTo(0, 0);
         }
 
+        function initApp() {
+            loadLocalData();
+            document.getElementById('display-quiz-title').innerText = DB.config.title;
+            document.getElementById('display-teacher-name').innerText = DB.config.teacherName;
+            document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
+            document.getElementById('display-quiz-banner').src = DB.config.bannerUrl;
+
+            const badge = document.getElementById('display-badge-status');
+            if (DB.config.status === 'published') {
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                badge.innerHTML = '<i class="fa-solid fa-circle text-[8px] mr-1 animate-pulse"></i> متاح للطلاب';
+            } else if (DB.config.status === 'draft') {
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+                badge.innerHTML = '<i class="fa-solid fa-pen-ruler mr-1"></i> مسودة قيد التعديل';
+            } else {
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/30';
+                badge.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> مغلق حالياً';
+            }
+
+            const select = document.getElementById('select-student');
+            select.innerHTML = '<option value="">-- اختر اسمك من القائمة --</option>';
+            DB.students.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.innerText = s.name;
+                select.appendChild(opt);
+            });
+        }
+
         function handleStartClick() {
             const studentId = document.getElementById('select-student').value;
             if (!studentId) {
                 showToast('يرجى اختيار اسم الطالب أولاً.', 'fa-circle-exclamation', true);
                 return;
             }
-            currentStudent = DB.students.find(s => s.id === studentId);
-            document.getElementById('passcode-student-label').innerText = `الطالب: ${currentStudent.name}`;
+
+            const student = DB.students.find(s => s.id === studentId);
+            if (!student) return;
+
+            if (student.isBanned) {
+                showToast(`الطالب محظور: ${student.banReason || 'مخالفة التعليمات'}`, 'fa-ban', true);
+                return;
+            }
+
+            if (DB.config.status !== 'published') {
+                showToast('الاختبار غير متاح حالياً للطلاب.', 'fa-lock', true);
+                return;
+            }
+
+            currentStudent = student;
+            document.getElementById('passcode-student-label').innerText = `الطالب: ${student.name}`;
             document.getElementById('student-passcode-input').value = '';
             document.getElementById('modal-passcode').classList.remove('hidden');
         }
@@ -542,8 +653,29 @@
         }
 
         function startActualQuiz() {
+            isPreviewMode = false;
+            const randomizedQuestions = DB.questions.map(q => {
+                let optionsWithIndices = q.options.map((opt, i) => ({ text: opt, originalIndex: i }));
+                for (let i = optionsWithIndices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithIndices[i], optionsWithIndices[j]] = [optionsWithIndices[j], optionsWithIndices[i]];
+                }
+                return {
+                    questionId: q.id,
+                    text: q.text,
+                    type: q.type,
+                    points: q.points,
+                    image: q.image,
+                    correctOriginalIndex: q.correct,
+                    shuffledOptions: optionsWithIndices
+                };
+            });
+
             activeAttempt = {
-                questions: DB.questions,
+                attemptId: 'att_' + Date.now(),
+                studentId: currentStudent.id,
+                studentName: currentStudent.name,
+                questions: randomizedQuestions,
                 currentIndex: 0,
                 answers: {},
                 timeRemaining: DB.config.durationMinutes * 60
@@ -557,33 +689,82 @@
             startQuizTimer();
         }
 
+        function previewQuiz() {
+            isPreviewMode = true;
+            currentStudent = { id: 'admin_preview', name: 'معاينة تجريبية (المدير)' };
+            
+            const previewQuestions = DB.questions.map(q => ({
+                questionId: q.id,
+                text: q.text,
+                type: q.type,
+                points: q.points,
+                image: q.image,
+                correctOriginalIndex: q.correct,
+                shuffledOptions: q.options.map((opt, i) => ({ text: opt, originalIndex: i }))
+            }));
+
+            activeAttempt = {
+                attemptId: 'prev_' + Date.now(),
+                studentId: 'admin_preview',
+                studentName: 'معاينة تجريبية',
+                questions: previewQuestions,
+                currentIndex: 0,
+                answers: {},
+                timeRemaining: DB.config.durationMinutes * 60
+            };
+
+            document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
+            document.getElementById('quiz-header-student').innerText = 'وضع المعاينة الإدارية';
+
+            navigateTo('screen-quiz');
+            renderCurrentQuestion();
+            startQuizTimer();
+        }
+
         function renderCurrentQuestion() {
             const q = activeAttempt.questions[activeAttempt.currentIndex];
             document.getElementById('quiz-question-counter').innerText = `السؤال ${activeAttempt.currentIndex + 1} من ${activeAttempt.questions.length}`;
             document.getElementById('quiz-q-points').innerText = q.points;
             document.getElementById('quiz-q-text').innerText = q.text;
 
+            const typeLabels = {
+                mcq: 'اختيار من متعدد',
+                true_false: 'صح أو خطأ',
+                complete: 'أكمل باختيار من أربعة',
+                error_correction: 'تصويب الخطأ'
+            };
+            document.getElementById('quiz-q-type').innerText = typeLabels[q.type] || 'سؤال';
+
+            const imgWrap = document.getElementById('quiz-q-image-wrap');
+            const imgEl = document.getElementById('quiz-q-image');
+            if (q.image && q.image.trim() !== '') {
+                imgEl.src = q.image;
+                imgWrap.classList.remove('hidden');
+            } else {
+                imgWrap.classList.add('hidden');
+            }
+
             const container = document.getElementById('quiz-options-container');
             container.innerHTML = '';
 
-            q.options.forEach((opt, idx) => {
+            q.shuffledOptions.forEach(optObj => {
                 const btn = document.createElement('button');
                 btn.className = 'glass-card hover:bg-purple-600/30 border border-purple-500/40 hover:border-purple-300 p-4 rounded-2xl text-white font-bold text-sm sm:text-base transition text-center btn-3d flex items-center justify-center min-h-[55px] wrap-safe leading-relaxed';
-                btn.innerText = opt;
-                btn.onclick = () => selectOption(idx);
+                btn.innerText = optObj.text;
+                btn.onclick = () => selectOption(optObj.originalIndex);
                 container.appendChild(btn);
             });
         }
 
-        function selectOption(index) {
+        function selectOption(originalIndex) {
             const currentQ = activeAttempt.questions[activeAttempt.currentIndex];
-            activeAttempt.answers[currentQ.id] = index;
+            activeAttempt.answers[currentQ.questionId] = originalIndex;
             activeAttempt.currentIndex++;
 
             if (activeAttempt.currentIndex < activeAttempt.questions.length) {
                 setTimeout(renderCurrentQuestion, 200);
             } else {
-                finishQuiz();
+                finishQuiz(false);
             }
         }
 
@@ -596,62 +777,135 @@
                 document.getElementById('quiz-timer').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
                 if (activeAttempt.timeRemaining <= 0) {
                     clearInterval(timerInterval);
-                    finishQuiz();
+                    finishQuiz(true);
                 }
             }, 1000);
         }
 
         function confirmExitQuiz() {
-            if (confirm('هل ترغب في إنهاء الاختبار الآن؟')) finishQuiz();
+            if (confirm('هل ترغب في إنهاء الاختبار الآن؟ سيتم احتساب الدرجة بناءً على الإجابات الحالية.')) {
+                finishQuiz(false);
+            }
         }
 
-        function finishQuiz() {
+        async function finishQuiz(isTimeOut = false) {
             clearInterval(timerInterval);
-            let total = 0, score = 0, details = [];
+            let totalPoints = 0;
+            let earnedScore = 0;
+            let correctCount = 0;
+            let wrongCount = 0;
+            let unansweredCount = 0;
+            let details = [];
 
             activeAttempt.questions.forEach(q => {
-                total += q.points;
-                const ans = activeAttempt.answers[q.id];
-                const isCorrect = (ans === q.correct);
-                if (isCorrect) score += q.points;
+                totalPoints += q.points;
+                const studentAns = activeAttempt.answers[q.questionId];
+                const origQuestion = DB.questions.find(orig => orig.id === q.questionId) || q;
+                const correctText = origQuestion.options[q.correctOriginalIndex];
+                let studentText = 'لم تتم الإجابة';
+                let isCorrect = false;
+
+                if (studentAns !== undefined) {
+                    studentText = origQuestion.options[studentAns];
+                    if (studentAns === q.correctOriginalIndex) {
+                        earnedScore += q.points;
+                        correctCount++;
+                        isCorrect = true;
+                    } else {
+                        wrongCount++;
+                    }
+                } else {
+                    unansweredCount++;
+                }
 
                 details.push({
-                    q: q.text,
-                    ans: ans !== undefined ? q.options[ans] : 'لم تتم الإجابة',
-                    correct: q.options[q.correct],
-                    isCorrect: isCorrect
+                    questionText: q.text,
+                    studentAnsText: studentText,
+                    correctAnsText: correctText,
+                    pointsEarned: isCorrect ? q.points : 0,
+                    pointsPossible: q.points,
+                    status: studentAns === undefined ? 'unanswered' : (isCorrect ? 'correct' : 'wrong')
                 });
             });
 
-            const percent = Math.round((score / total) * 100);
-            document.getElementById('result-score').innerText = `${score} / ${total}`;
-            document.getElementById('result-percent').innerText = `النسبة المئوية: ${percent}%`;
+            const percent = totalPoints > 0 ? Math.round((earnedScore / totalPoints) * 100) : 0;
 
-            DB.results.push({
-                name: currentStudent.name,
-                score: `${score} / ${total}`,
-                percent: `${percent}%`,
-                date: new Date().toLocaleTimeString('ar-EG')
-            });
-            saveLocalData();
+            const resultObj = {
+                resultId: 'res_' + Date.now(),
+                studentId: currentStudent.id,
+                studentName: currentStudent.name,
+                examTitle: DB.config.title,
+                dateTime: new Date().toLocaleString('ar-EG'),
+                score: earnedScore,
+                totalPoints: totalPoints,
+                percent: percent,
+                correctCount: correctCount,
+                wrongCount: wrongCount,
+                unansweredCount: unansweredCount,
+                details: details
+            };
+
+            if (!isPreviewMode) {
+                DB.results.push(resultObj);
+                await saveDatabase();
+            }
+
+            displayResultScreen(resultObj);
+        }
+
+        function displayResultScreen(result) {
+            document.getElementById('result-score').innerText = `${result.score} / ${result.totalPoints}`;
+            document.getElementById('result-percent').innerText = `النسبة المئوية: ${result.percent}%`;
+            document.getElementById('result-stat-correct').innerText = result.correctCount;
+            document.getElementById('result-stat-wrong').innerText = result.wrongCount;
+            document.getElementById('result-stat-unanswered').innerText = result.unansweredCount;
+            document.getElementById('result-stat-total').innerText = result.details.length;
+
+            const headline = document.getElementById('result-headline');
+            const msg = document.getElementById('result-message');
+            const iconWrap = document.getElementById('result-status-icon');
+
+            if (result.percent >= 85) {
+                headline.innerText = 'أداء باهر وممتاز يا بطل! 🌟';
+                msg.innerText = 'ما شاء الله عليك، استيعاب وتفوق رائع في مادة الدراسات الاجتماعية!';
+                iconWrap.className = 'w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
+            } else if (result.percent >= 65) {
+                headline.innerText = 'نتيجة جيدة جداً، واصل التقدم! 👏';
+                msg.innerText = 'مجهود طيب، راجع النقاط التي أخطأت بها للوصول للدرجة النهائية.';
+                iconWrap.className = 'w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-purple-500/20 text-purple-300 border border-purple-500/40';
+            } else {
+                headline.innerText = 'محاولة طيبة، راجع دروسك وستتفوق! 💪';
+                msg.innerText = 'لا بأس، كل اختبار فرصة للتعلم وتثبيت المعلومات.';
+                iconWrap.className = 'w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-amber-500/20 text-amber-400 border border-amber-500/40';
+            }
 
             const breakdown = document.getElementById('result-breakdown');
             breakdown.innerHTML = '';
-            details.forEach((d, i) => {
-                const item = document.createElement('div');
-                item.className = `p-3 rounded-2xl border text-xs leading-relaxed ${d.isCorrect ? 'bg-emerald-900/20 border-emerald-600/40' : 'bg-red-900/20 border-red-600/40'}`;
-                item.innerHTML = `
-                    <div class="font-bold text-white mb-1">س${i+1}: ${d.q}</div>
-                    <div class="text-purple-200">إجابتك: <span class="font-bold ${d.isCorrect ? 'text-emerald-300' : 'text-red-300'}">${d.ans}</span></div>
-                    ${!d.isCorrect ? `<div class="text-emerald-400 mt-0.5 font-bold">الإجابة الصحيحة: ${d.correct}</div>` : ''}
+
+            result.details.forEach((item, idx) => {
+                const div = document.createElement('div');
+                const isCorr = item.status === 'correct';
+                const isUnans = item.status === 'unanswered';
+
+                div.className = `p-3 rounded-2xl border text-xs leading-relaxed wrap-safe ${
+                    isCorr ? 'bg-emerald-900/20 border-emerald-600/40' : (isUnans ? 'bg-amber-900/20 border-amber-600/40' : 'bg-red-900/20 border-red-600/40')
+                }`;
+
+                div.innerHTML = `
+                    <div class="flex justify-between font-bold mb-1">
+                        <span class="text-white">س${idx + 1}: ${item.questionText}</span>
+                        <span class="${isCorr ? 'text-emerald-400' : 'text-red-400'}">${item.pointsEarned} / ${item.pointsPossible} درجات</span>
+                    </div>
+                    <div class="text-purple-200">إجابتك: <span class="font-bold ${isCorr ? 'text-emerald-300' : 'text-red-300'}">${item.studentAnsText}</span></div>
+                    ${!isCorr ? `<div class="text-emerald-400 mt-0.5 font-bold">الإجابة الصحيحة: ${item.correctAnsText}</div>` : ''}
                 `;
-                breakdown.appendChild(item);
+                breakdown.appendChild(div);
             });
 
             navigateTo('screen-result');
         }
 
-        // --- ADMIN PANEL METHODS ---
+        // --- ADMIN PANEL CODE ---
         function openAdminModal() {
             document.getElementById('admin-passcode-input').value = '';
             document.getElementById('modal-admin-auth').classList.remove('hidden');
@@ -678,7 +932,7 @@
         }
 
         function switchAdminTab(tabName) {
-            ['settings', 'questions', 'students', 'results'].forEach(t => {
+            ['settings', 'questions', 'students', 'banned', 'results'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`).classList.add('hidden');
                 document.getElementById(`admin-tab-btn-${t}`).className = 'admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap';
             });
@@ -694,22 +948,30 @@
             document.getElementById('admin-input-phone').value = DB.config.teacherPhone;
             document.getElementById('admin-input-duration').value = DB.config.durationMinutes;
             document.getElementById('admin-input-banner').value = DB.config.bannerUrl;
+            document.getElementById('admin-input-status').value = DB.config.status;
+            document.getElementById('admin-input-newpass').value = '';
 
             renderAdminQuestions();
             renderAdminStudents();
+            renderAdminBanned();
             renderAdminResults();
         }
 
-        function saveAdminSettings() {
-            DB.config.title = document.getElementById('admin-input-title').value.trim();
+        async function saveAdminSettings() {
+            DB.config.title = document.getElementById('admin-input-title').value.trim() || DB.config.title;
             DB.config.grade = document.getElementById('admin-input-grade').value.trim();
             DB.config.subject = document.getElementById('admin-input-subject').value.trim();
             DB.config.teacherName = document.getElementById('admin-input-teacher').value.trim();
             DB.config.teacherPhone = document.getElementById('admin-input-phone').value.trim();
             DB.config.durationMinutes = parseInt(document.getElementById('admin-input-duration').value) || 30;
             DB.config.bannerUrl = document.getElementById('admin-input-banner').value.trim();
-            saveLocalData();
-            showToast('تم حفظ الإعدادات بنجاح!', 'fa-check');
+            DB.config.status = document.getElementById('admin-input-status').value;
+
+            const newPass = document.getElementById('admin-input-newpass').value.trim();
+            if (newPass) DB.config.adminPass = newPass;
+
+            await saveDatabase();
+            showToast('تم حفظ التعديلات بنجاح سحابياً.', 'fa-check');
         }
 
         function handleQTypeChange() {
@@ -737,16 +999,21 @@
                         <span class="font-bold text-white block">س${idx + 1}: ${q.text}</span>
                         <span class="text-purple-300 font-semibold">(${q.points} درجات)</span>
                     </div>
-                    <button onclick="deleteQuestion('${q.id}')" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash"></i></button>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <button onclick="editQuestion('${q.id}')" class="text-purple-300 hover:text-purple-200 p-1"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteQuestion('${q.id}')" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 `;
                 list.appendChild(div);
             });
         }
 
-        function saveQuestion() {
+        async function saveQuestion() {
+            const qId = document.getElementById('admin-q-id').value;
             const type = document.getElementById('admin-q-type').value;
             const text = document.getElementById('admin-q-text').value.trim();
             const points = parseInt(document.getElementById('admin-q-points').value) || 1;
+            const image = document.getElementById('admin-q-image').value.trim();
             const correct = parseInt(document.getElementById('admin-q-correct').value);
 
             if (!text) {
@@ -754,8 +1021,10 @@
                 return;
             }
 
-            let options = ['عبارة صحيحة', 'عبارة خاطئة'];
-            if (type === 'mcq') {
+            let options = [];
+            if (type === 'true_false') {
+                options = ['عبارة صحيحة', 'عبارة خاطئة'];
+            } else {
                 const opt0 = document.getElementById('admin-q-opt-0').value.trim();
                 const opt1 = document.getElementById('admin-q-opt-1').value.trim();
                 const opt2 = document.getElementById('admin-q-opt-2').value.trim();
@@ -767,27 +1036,59 @@
                 options = [opt0, opt1, opt2, opt3];
             }
 
-            DB.questions.push({
-                id: 'q_' + Date.now(),
-                type, text, options, correct, points
-            });
-            saveLocalData();
+            if (qId) {
+                const target = DB.questions.find(q => q.id === qId);
+                if (target) {
+                    target.type = type; target.text = text; target.options = options;
+                    target.correct = correct; target.points = points; target.image = image;
+                }
+            } else {
+                DB.questions.push({
+                    id: 'q_' + Date.now(),
+                    type, text, options, correct, points, image
+                });
+            }
+
+            await saveDatabase();
             resetQuestionForm();
             renderAdminQuestions();
-            showToast('تمت إضافة السؤال بنجاح.', 'fa-check');
+            showToast('تم حفظ وتحديث السؤال بنجاح.', 'fa-check');
         }
 
-        function deleteQuestion(id) {
+        function editQuestion(id) {
+            const q = DB.questions.find(q => q.id === id);
+            if (!q) return;
+            document.getElementById('q-form-title').innerText = 'تعديل السؤال';
+            document.getElementById('admin-q-id').value = q.id;
+            document.getElementById('admin-q-type').value = q.type;
+            handleQTypeChange();
+            document.getElementById('admin-q-text').value = q.text;
+            document.getElementById('admin-q-points').value = q.points;
+            document.getElementById('admin-q-image').value = q.image || '';
+
+            if (q.type !== 'true_false') {
+                document.getElementById('admin-q-opt-0').value = q.options[0] || '';
+                document.getElementById('admin-q-opt-1').value = q.options[1] || '';
+                document.getElementById('admin-q-opt-2').value = q.options[2] || '';
+                document.getElementById('admin-q-opt-3').value = q.options[3] || '';
+            }
+            document.getElementById('admin-q-correct').value = q.correct;
+        }
+
+        async function deleteQuestion(id) {
             if (confirm('هل أنت متأكد من حذف هذا السؤال؟')) {
                 DB.questions = DB.questions.filter(q => q.id !== id);
-                saveLocalData();
+                await saveDatabase();
                 renderAdminQuestions();
                 showToast('تم حذف السؤال.', 'fa-trash');
             }
         }
 
         function resetQuestionForm() {
+            document.getElementById('q-form-title').innerText = 'إضافة سؤال جديد';
+            document.getElementById('admin-q-id').value = '';
             document.getElementById('admin-q-text').value = '';
+            document.getElementById('admin-q-image').value = '';
             document.getElementById('admin-q-opt-0').value = '';
             document.getElementById('admin-q-opt-1').value = '';
             document.getElementById('admin-q-opt-2').value = '';
@@ -803,13 +1104,17 @@
                     <td class="p-2.5 font-mono">${s.id}</td>
                     <td class="p-2.5 font-bold text-white">${s.name}</td>
                     <td class="p-2.5 font-mono text-purple-300">${s.passcode}</td>
-                    <td class="p-2.5"><button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400 hover:underline">حذف</button></td>
+                    <td class="p-2.5">${s.isBanned ? '<span class="text-red-400 font-bold">محظور</span>' : '<span class="text-emerald-400">نشط</span>'}</td>
+                    <td class="p-2.5 flex gap-2">
+                        <button onclick="toggleBanStudent('${s.id}')" class="text-xs ${s.isBanned ? 'text-emerald-400' : 'text-amber-400'}">${s.isBanned ? 'فك الحظر' : 'حظر'}</button>
+                        <button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400">حذف</button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function addStudent() {
+        async function addStudent() {
             const name = document.getElementById('admin-new-student-name').value.trim();
             const pass = document.getElementById('admin-new-student-pass').value.trim();
             if (!name || !pass) {
@@ -819,38 +1124,88 @@
             DB.students.push({
                 id: 'std_' + Date.now().toString().slice(-4),
                 name,
-                passcode: pass
+                passcode: pass,
+                isBanned: false,
+                banReason: '',
+                banTime: ''
             });
-            saveLocalData();
+            await saveDatabase();
             document.getElementById('admin-new-student-name').value = '';
             document.getElementById('admin-new-student-pass').value = '';
             renderAdminStudents();
             showToast('تمت إضافة الطالب بنجاح.', 'fa-user-check');
         }
 
-        function deleteStudent(id) {
+        async function toggleBanStudent(id) {
+            const s = DB.students.find(x => x.id === id);
+            if (!s) return;
+            if (!s.isBanned) {
+                const reason = prompt('يرجى كتابة سبب الحظر:', 'مخالفة تعليمات الاختبار');
+                if (reason !== null) {
+                    s.isBanned = true;
+                    s.banReason = reason;
+                    s.banTime = new Date().toLocaleString('ar-EG');
+                }
+            } else {
+                s.isBanned = false;
+                s.banReason = '';
+                s.banTime = '';
+            }
+            await saveDatabase();
+            renderAdminStudents();
+            renderAdminBanned();
+        }
+
+        async function deleteStudent(id) {
             if (confirm('هل أنت متأكد من حذف هذا الطالب؟')) {
                 DB.students = DB.students.filter(s => s.id !== id);
-                saveLocalData();
+                await saveDatabase();
                 renderAdminStudents();
+                renderAdminBanned();
                 showToast('تم حذف الطالب.', 'fa-trash');
             }
+        }
+
+        function renderAdminBanned() {
+            const tbody = document.getElementById('admin-banned-tbody');
+            tbody.innerHTML = '';
+            const banned = DB.students.filter(s => s.isBanned);
+
+            if (banned.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">لا يوجد طلاب محظورون حالياً.</td></tr>';
+                return;
+            }
+
+            banned.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2.5 font-bold text-white">${s.name}</td>
+                    <td class="p-2.5 text-red-300">${s.banReason || 'بدون سبب'}</td>
+                    <td class="p-2.5 text-slate-400 font-mono">${s.banTime}</td>
+                    <td class="p-2.5"><button onclick="toggleBanStudent('${s.id}')" class="bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 px-2 py-1 rounded-lg text-[11px]">فك الحظر</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         function renderAdminResults() {
             const tbody = document.getElementById('admin-results-tbody');
             tbody.innerHTML = '';
+
             if (DB.results.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-500">لا توجد نتائج مسجلة حتى الآن.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">لا توجد نتائج مسجلة حتى الآن.</td></tr>';
                 return;
             }
+
             DB.results.slice().reverse().forEach(r => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="p-2.5 font-bold text-white">${r.name}</td>
-                    <td class="p-2.5 font-mono text-purple-300">${r.score}</td>
-                    <td class="p-2.5 font-bold text-emerald-400">${r.percent}</td>
-                    <td class="p-2.5 text-slate-400 font-mono text-[11px]">${r.date}</td>
+                    <td class="p-2.5 font-bold text-white">${r.studentName}</td>
+                    <td class="p-2.5 font-mono text-purple-300">${r.score} / ${r.totalPoints}</td>
+                    <td class="p-2.5 font-bold ${r.percent >= 50 ? 'text-emerald-400' : 'text-red-400'}">${r.percent}%</td>
+                    <td class="p-2.5 text-slate-400">${r.correctCount} صح / ${r.wrongCount} خطأ</td>
+                    <td class="p-2.5 text-slate-400 font-mono text-[11px]">${r.dateTime}</td>
+                    <td class="p-2.5"><button onclick='displayResultScreen(${JSON.stringify(r)})' class="text-purple-300 hover:text-purple-200 underline text-xs">عرض الورقة</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -861,10 +1216,12 @@
                 showToast('لا توجد نتائج للتصدير.', 'fa-circle-exclamation', true);
                 return;
             }
-            let csv = "\uFEFFاسم الطالب,الدرجة,النسبة المئوية,التاريخ\n";
+
+            let csv = "\uFEFFمعرف الطالب,اسم الطالب,الدرجة,إجمالي الدرجات,النسبة المئوية,صواب,خطأ,غير مجاب,التاريخ والوقت\n";
             DB.results.forEach(r => {
-                csv += `"${r.name}","${r.score}","${r.percent}","${r.date}"\n`;
+                csv += `"${r.studentId}","${r.studentName}","${r.score}","${r.totalPoints}","${r.percent}%","${r.correctCount}","${r.wrongCount}","${r.unansweredCount}","${r.dateTime}"\n`;
             });
+
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);

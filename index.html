@@ -135,7 +135,7 @@
                         <span id="quiz-timer">29:59</span>
                     </div>
                     <div class="bg-purple-950/80 text-purple-200 border border-purple-500/40 px-3 py-1.5 rounded-xl font-bold text-xs">
-                        <span id="quiz-question-counter">السؤال 1 من 4</span>
+                        <span id="quiz-question-counter">السؤال 1 من 40</span>
                     </div>
                 </div>
             </div>
@@ -497,7 +497,7 @@
             </div>
             <h3 class="font-bold text-lg text-white">هل أنت مستعد لبدء الاختبار؟</h3>
             <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs text-purple-200 space-y-1.5 text-right">
-                <div class="flex justify-between"><span>عدد الأسئلة:</span> <span id="ready-q-count" class="font-bold text-purple-300">4 أسئلة</span></div>
+                <div class="flex justify-between"><span>عدد الأسئلة:</span> <span id="ready-q-count" class="font-bold text-purple-300">40 سؤالاً</span></div>
                 <div class="flex justify-between"><span>مدة الاختبار:</span> <span id="ready-duration" class="font-bold text-purple-300">30 دقيقة</span></div>
                 <div class="text-[11px] text-amber-300 pt-1">تنبيه: لا يمكن الرجوع للسؤال السابق بعد الإجابة.</div>
             </div>
@@ -641,7 +641,7 @@
         }
 
         const DEFAULT_CONFIG = {
-            testId: 'exam_soc_05_v6',
+            testId: 'exam_soc_05_v8_final',
             title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
             grade: 'الصف الخامس الابتدائي',
             subject: 'الدراسات الاجتماعية',
@@ -660,7 +660,7 @@
             { id: 'std_503', name: 'يوسف حسام', passcode: '5566', isBanned: false, banReason: '', banTime: '' }
         ];
 
-        // --- الأسئلة الـ 40 المرتبة والجاهزة ---
+        // --- الأسئلة الـ 40 الأساسية المطلقة ---
         const DEFAULT_QUESTIONS = [
             { id: 'q_tf_1', type: 'true_false', text: 'تُعد شبكة الإحداثيات خطوطاً حقيقية محفورة على سطح الأرض لتسهيل حركة الملاحة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 1, points: 1, image: '' },
             { id: 'q_tf_2', type: 'true_false', text: 'تتشابه خطوط الطول ودوائر العرض في أنهما يستخدمان لتحديد الموقع على سطح الأرض بدقة.', options: ['عبارة صحيحة', 'عبارة خاطئة'], correct: 0, points: 1, image: '' },
@@ -717,7 +717,6 @@
         let isPreviewMode = false;
 
         async function fetchCloudData() {
-            // فرض إعطاء الأولوية للأسئلة المحدثة مباشرة وثباتها
             DB.questions = DEFAULT_QUESTIONS;
             try {
                 const response = await fetch(`${GOOGLE_SCRIPT_URL}?testId=${DEFAULT_CONFIG.testId}`);
@@ -734,6 +733,7 @@
                     }
                 }
             } catch(e) {}
+            DB.questions = DEFAULT_QUESTIONS;
             initApp();
             checkActiveResumeSession();
         }
@@ -900,7 +900,7 @@
             const entered = document.getElementById('student-passcode-input').value.trim();
             if (entered === currentStudent.passcode) {
                 closePasscodeModal();
-                document.getElementById('ready-q-count').innerText = `${DB.questions.length} أسئلة`;
+                document.getElementById('ready-q-count').innerText = `${DB.questions.length} سؤالاً`;
                 document.getElementById('ready-duration').innerText = `${DB.config.durationMinutes} دقيقة`;
                 document.getElementById('modal-ready').classList.remove('hidden');
             } else {
@@ -918,6 +918,7 @@
             isPreviewMode = false;
 
             const isRandom = DB.config.isRandomOrder !== false;
+            DB.questions = DEFAULT_QUESTIONS;
 
             let preparedQuestions = DB.questions.map(q => {
                 const correctText = q.options[q.correct];
@@ -967,6 +968,7 @@
         function previewQuiz() {
             isPreviewMode = true;
             currentStudent = { id: 'preview_id', name: 'معاينة تجريبية (المدير)' };
+            DB.questions = DEFAULT_QUESTIONS;
             
             const previewQuestions = DB.questions.map(q => ({
                 questionId: q.id,

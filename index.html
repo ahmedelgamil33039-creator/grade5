@@ -210,7 +210,7 @@
             </div>
         </section>
 
-        <!-- SCREEN 4: COMPLETE ADVANCED ADMIN DASHBOARD -->
+        <!-- SCREEN 4: COMPLETE ADMIN DASHBOARD -->
         <section id="screen-admin" class="w-full space-y-6 hidden">
             <div class="glass-card rounded-3xl p-6 border border-purple-500/40 space-y-6">
                 
@@ -221,15 +221,15 @@
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
                         <div>
-                            <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي المتقدمة</h2>
-                            <p class="text-xs text-purple-300">متصلة سحابياً ومحلياً بكامل الصلاحيات</p>
+                            <h2 class="text-xl font-black text-white">لوحة تحكم الصف الخامس الابتدائي</h2>
+                            <p class="text-xs text-purple-300">متصلة سحابياً ومحلياً بجداول بيانات Google</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="previewQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
                             <i class="fa-solid fa-eye"></i> معاينة
                         </button>
-                        <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-2 rounded-xl transition">
+                        <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 text-xs font-bold px-4 py-2 rounded-xl transition">
                             <i class="fa-solid fa-arrow-right-from-bracket ml-1"></i> خروج
                         </button>
                     </div>
@@ -301,7 +301,7 @@
 
                     <div class="pt-4">
                         <button onclick="saveAdminSettings()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">
-                            <i class="fa-solid fa-cloud-arrow-up ml-1"></i> حفظ وتحديث فوري
+                            <i class="fa-solid fa-cloud-arrow-up ml-1"></i> حفظ وتحديث سحابي فوري
                         </button>
                     </div>
                 </div>
@@ -448,7 +448,25 @@
             <input type="password" id="student-passcode-input" placeholder="••••" class="w-full bg-slate-900 border border-purple-500/40 p-3 rounded-2xl text-center text-xl font-mono text-white tracking-widest focus:outline-none focus:border-purple-400">
             <div class="flex gap-2">
                 <button onclick="closePasscodeModal()" class="w-1/2 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">إلغاء</button>
-                <button onclick="verifyStudentPasscode()" class="w-1/2 bg-purple-600 hover:bg-purple-500 text-white py-2.5 rounded-xl text-xs font-bold">دخول</button>
+                <button onclick="verifyStudentPasscode()" class="w-1/2 bg-purple-600 hover:bg-purple-500 text-white py-2.5 rounded-xl text-xs font-bold">تحقق ومتابعة</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ready" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+        <div class="glass-modal rounded-3xl p-6 max-w-sm w-full text-center space-y-4 border border-purple-500/30 shadow-2xl">
+            <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl mx-auto flex items-center justify-center text-xl">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h3 class="font-bold text-lg text-white">هل أنت مستعد لبدء الاختبار؟</h3>
+            <div class="bg-slate-900/80 p-3 rounded-xl border border-purple-500/30 text-xs text-purple-200 space-y-1.5 text-right">
+                <div class="flex justify-between"><span>عدد الأسئلة:</span> <span id="ready-q-count" class="font-bold text-purple-300">4 أسئلة</span></div>
+                <div class="flex justify-between"><span>مدة الاختبار:</span> <span id="ready-duration" class="font-bold text-purple-300">30 دقيقة</span></div>
+                <div class="text-[11px] text-amber-300 pt-1">تنبيه: لا يمكن الرجوع للسؤال السابق بعد الإجابة.</div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeReadyModal()" class="w-1/2 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">إلغاء</button>
+                <button onclick="startActualQuiz()" class="w-1/2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-lg">بدء الاختبار الآن</button>
             </div>
         </div>
     </div>
@@ -458,8 +476,8 @@
             <div class="w-12 h-12 bg-purple-500/20 text-purple-300 rounded-2xl mx-auto flex items-center justify-center text-xl">
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <h3 class="font-bold text-lg text-white">دخول لوحة الإدارة</h3>
-            <p class="text-xs text-purple-300">أدخل الرقم السري الإداري (330399)</p>
+            <h3 class="font-bold text-lg text-white">دخول لوحة إدارة الصف الخامس</h3>
+            <p class="text-xs text-purple-300">أدخل الرقم السري الإداري الخاص بمس رشا</p>
             <input type="password" id="admin-passcode-input" placeholder="330399" class="w-full bg-slate-900 border border-purple-500/40 p-3 rounded-2xl text-center text-base font-mono text-white tracking-wider focus:outline-none focus:border-purple-400">
             <div class="flex gap-2">
                 <button onclick="closeAdminModal()" class="w-1/2 bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">إلغاء</button>
@@ -470,8 +488,74 @@
 
     <!-- SCRIPT ENGINE -->
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby855wEYncAGqp9mv9uqYJG4JMluOlO8LmGMRh4V5_Fg4JjLXRznwzcFMX4T4LBHJITDw/exec";
+        // GOOGLE APPS SCRIPT CLOUD ENDPOINT FOR GRADE 5
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdYVqlD3zaTdIAkJSzlVUR2KrvCvSceFJrXl9qB3UqccOryI7LhyGi6NfaOXG3IC6d/exec";
 
+        // Web Audio Synthesizer
+        let audioCtx = null;
+        function initAudio() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            } catch(e) {}
+        }
+
+        ['click', 'touchstart', 'keydown'].forEach(evt => {
+            document.addEventListener(evt, initAudio, { once: true });
+        });
+
+        function playSound(type) {
+            initAudio();
+            try {
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(now); osc.stop(now + 0.05);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(now); osc.stop(now + 0.18);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.linearRampToValueAtTime(140, now + 0.15);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(now); osc.stop(now + 0.15);
+                } else if (type === 'fanfare') {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.type = 'triangle';
+                        o.frequency.value = freq;
+                        g.gain.setValueAtTime(0.2, now + idx * 0.08);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+                        o.connect(g); g.connect(audioCtx.destination);
+                        o.start(now + idx * 0.08); o.stop(now + idx * 0.08 + 0.25);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        // Central Database for Grade 5
         const DEFAULT_CONFIG = {
             testId: 'exam_soc_05',
             title: 'اختبار الصف الخامس الابتدائي في الدراسات الاجتماعية',
@@ -537,17 +621,39 @@
             results: []
         };
 
-        function loadLocalData() {
-            const saved = localStorage.getItem('grade5_master_db');
-            if (saved) {
-                try { DB = JSON.parse(saved); } catch(e) {}
+        async function fetchCloudData() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                if (response.ok) {
+                    const text = await response.text();
+                    if (text && text.trim().length > 10) {
+                        const data = JSON.parse(text);
+                        if (data && (data.questions || data.config)) {
+                            DB.config = data.config || DEFAULT_CONFIG;
+                            DB.students = data.students || DEFAULT_STUDENTS;
+                            DB.questions = data.questions || DEFAULT_QUESTIONS;
+                            DB.results = data.results || [];
+                        } else {
+                            await saveDatabase();
+                        }
+                    } else {
+                        await saveDatabase();
+                    }
+                }
+            } catch(e) {
+                const saved = localStorage.getItem('grade5_full_master_db');
+                if (saved) {
+                    try { DB = JSON.parse(saved); } catch(err) {}
+                }
+            } finally {
+                initApp();
             }
         }
 
         async function saveDatabase() {
-            localStorage.setItem('grade5_master_db', JSON.stringify(DB));
+            localStorage.setItem('grade5_full_master_db', JSON.stringify(DB));
             try {
-                fetch(GOOGLE_SCRIPT_URL, {
+                await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
@@ -584,7 +690,6 @@
         }
 
         function initApp() {
-            loadLocalData();
             document.getElementById('display-quiz-title').innerText = DB.config.title;
             document.getElementById('display-teacher-name').innerText = DB.config.teacherName;
             document.getElementById('display-teacher-phone').innerText = DB.config.teacherPhone;
@@ -612,7 +717,13 @@
             });
         }
 
+        function getTodayDateString() {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        }
+
         function handleStartClick() {
+            playSound('click');
             const studentId = document.getElementById('select-student').value;
             if (!studentId) {
                 showToast('يرجى اختيار اسم الطالب أولاً.', 'fa-circle-exclamation', true);
@@ -623,12 +734,21 @@
             if (!student) return;
 
             if (student.isBanned) {
-                showToast(`الطالب محظور: ${student.banReason || 'مخالفة التعليمات'}`, 'fa-ban', true);
+                showToast(`أنت محظور من أداء الاختبار. السبب: ${student.banReason || 'مخالفة التعليمات'}`, 'fa-ban', true);
                 return;
             }
 
             if (DB.config.status !== 'published') {
                 showToast('الاختبار غير متاح حالياً للطلاب.', 'fa-lock', true);
+                return;
+            }
+
+            const today = getTodayDateString();
+            const existingResult = DB.results.find(r => r.studentId === student.id && r.dateString === today);
+            if (existingResult) {
+                if (confirm('لقد أديت هذا الاختبار اليوم بالفعل. لا يسمح بأداء الاختبار أكثر من مرة واحدة خلال اليوم.\n\nهل ترغب في عرض نتيجتك السابقة؟')) {
+                    displayResultScreen(existingResult);
+                }
                 return;
             }
 
@@ -639,21 +759,34 @@
         }
 
         function closePasscodeModal() {
+            playSound('click');
             document.getElementById('modal-passcode').classList.add('hidden');
         }
 
         function verifyStudentPasscode() {
             const entered = document.getElementById('student-passcode-input').value.trim();
             if (entered === currentStudent.passcode) {
+                playSound('correct');
                 closePasscodeModal();
-                startActualQuiz();
+                document.getElementById('ready-q-count').innerText = `${DB.questions.length} أسئلة`;
+                document.getElementById('ready-duration').innerText = `${DB.config.durationMinutes} دقيقة`;
+                document.getElementById('modal-ready').classList.remove('hidden');
             } else {
+                playSound('wrong');
                 showToast('الرقم السري غير صحيح.', 'fa-triangle-exclamation', true);
             }
         }
 
+        function closeReadyModal() {
+            playSound('click');
+            document.getElementById('modal-ready').classList.add('hidden');
+        }
+
         function startActualQuiz() {
+            playSound('click');
+            closeReadyModal();
             isPreviewMode = false;
+
             const randomizedQuestions = DB.questions.map(q => {
                 let optionsWithIndices = q.options.map((opt, i) => ({ text: opt, originalIndex: i }));
                 for (let i = optionsWithIndices.length - 1; i > 0; i--) {
@@ -671,6 +804,11 @@
                 };
             });
 
+            for (let i = randomizedQuestions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [randomizedQuestions[i], randomizedQuestions[j]] = [randomizedQuestions[j], randomizedQuestions[i]];
+            }
+
             activeAttempt = {
                 attemptId: 'att_' + Date.now(),
                 studentId: currentStudent.id,
@@ -678,7 +816,9 @@
                 questions: randomizedQuestions,
                 currentIndex: 0,
                 answers: {},
-                timeRemaining: DB.config.durationMinutes * 60
+                startTime: Date.now(),
+                timeRemaining: DB.config.durationMinutes * 60,
+                isCompleted: false
             };
 
             document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
@@ -690,8 +830,9 @@
         }
 
         function previewQuiz() {
+            playSound('click');
             isPreviewMode = true;
-            currentStudent = { id: 'admin_preview', name: 'معاينة تجريبية (المدير)' };
+            currentStudent = { id: 'preview_id', name: 'معاينة تجريبية (المدير)' };
             
             const previewQuestions = DB.questions.map(q => ({
                 questionId: q.id,
@@ -704,13 +845,15 @@
             }));
 
             activeAttempt = {
-                attemptId: 'prev_' + Date.now(),
-                studentId: 'admin_preview',
+                attemptId: 'preview_attempt',
+                studentId: 'preview',
                 studentName: 'معاينة تجريبية',
                 questions: previewQuestions,
                 currentIndex: 0,
                 answers: {},
-                timeRemaining: DB.config.durationMinutes * 60
+                startTime: Date.now(),
+                timeRemaining: DB.config.durationMinutes * 60,
+                isCompleted: false
             };
 
             document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
@@ -759,10 +902,16 @@
         function selectOption(originalIndex) {
             const currentQ = activeAttempt.questions[activeAttempt.currentIndex];
             activeAttempt.answers[currentQ.questionId] = originalIndex;
-            activeAttempt.currentIndex++;
 
+            if (originalIndex === currentQ.correctOriginalIndex) {
+                playSound('correct');
+            } else {
+                playSound('wrong');
+            }
+
+            activeAttempt.currentIndex++;
             if (activeAttempt.currentIndex < activeAttempt.questions.length) {
-                setTimeout(renderCurrentQuestion, 200);
+                setTimeout(renderCurrentQuestion, 250);
             } else {
                 finishQuiz(false);
             }
@@ -783,13 +932,15 @@
         }
 
         function confirmExitQuiz() {
-            if (confirm('هل ترغب في إنهاء الاختبار الآن؟ سيتم احتساب الدرجة بناءً على الإجابات الحالية.')) {
+            if (confirm('هل أنت متأكد من إنهاء الاختبار الآن؟ سيتم احتساب الدرجة بناءً على الإجابات الحالية.')) {
                 finishQuiz(false);
             }
         }
 
         async function finishQuiz(isTimeOut = false) {
             clearInterval(timerInterval);
+            activeAttempt.isCompleted = true;
+
             let totalPoints = 0;
             let earnedScore = 0;
             let correctCount = 0;
@@ -835,6 +986,7 @@
                 studentId: currentStudent.id,
                 studentName: currentStudent.name,
                 examTitle: DB.config.title,
+                dateString: getTodayDateString(),
                 dateTime: new Date().toLocaleString('ar-EG'),
                 score: earnedScore,
                 totalPoints: totalPoints,
@@ -842,6 +994,7 @@
                 correctCount: correctCount,
                 wrongCount: wrongCount,
                 unansweredCount: unansweredCount,
+                isTimeOut: isTimeOut,
                 details: details
             };
 
@@ -850,6 +1003,7 @@
                 await saveDatabase();
             }
 
+            playSound('fanfare');
             displayResultScreen(resultObj);
         }
 
@@ -867,15 +1021,15 @@
 
             if (result.percent >= 85) {
                 headline.innerText = 'أداء باهر وممتاز يا بطل! 🌟';
-                msg.innerText = 'ما شاء الله عليك، استيعاب وتفوق رائع في مادة الدراسات الاجتماعية!';
+                msg.innerText = 'ما شاء الله عليك، إجاباتك تدل على فهم واستيعاب رائع لمنهج الصف الخامس!';
                 iconWrap.className = 'w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40';
             } else if (result.percent >= 65) {
                 headline.innerText = 'نتيجة جيدة جداً، واصل التقدم! 👏';
-                msg.innerText = 'مجهود طيب، راجع النقاط التي أخطأت بها للوصول للدرجة النهائية.';
+                msg.innerText = 'مستوى طيب ومجهود تشكر عليه، بقليل من المراجعة ستصل للدرجة النهائية.';
                 iconWrap.className = 'w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-purple-500/20 text-purple-300 border border-purple-500/40';
             } else {
                 headline.innerText = 'محاولة طيبة، راجع دروسك وستتفوق! 💪';
-                msg.innerText = 'لا بأس، كل اختبار فرصة للتعلم وتثبيت المعلومات.';
+                msg.innerText = 'لا بأس، كل تجربة تعلمنا الكثير. راجع النقاط الخاطئة واستعد للاختبار القادم.';
                 iconWrap.className = 'w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-3xl shadow-xl bg-amber-500/20 text-amber-400 border border-amber-500/40';
             }
 
@@ -905,33 +1059,39 @@
             navigateTo('screen-result');
         }
 
-        // --- ADMIN PANEL CODE ---
+        // --- ADMIN PANEL METHODS ---
         function openAdminModal() {
+            playSound('click');
             document.getElementById('admin-passcode-input').value = '';
             document.getElementById('modal-admin-auth').classList.remove('hidden');
         }
 
         function closeAdminModal() {
+            playSound('click');
             document.getElementById('modal-admin-auth').classList.add('hidden');
         }
 
         function verifyAdminLogin() {
             const pass = document.getElementById('admin-passcode-input').value.trim();
             if (pass === DB.config.adminPass) {
+                playSound('correct');
                 closeAdminModal();
                 loadAdminData();
                 navigateTo('screen-admin');
             } else {
+                playSound('wrong');
                 showToast('الرقم السري للإدارة غير صحيح!', 'fa-lock', true);
             }
         }
 
         function logoutAdmin() {
+            playSound('click');
             initApp();
             navigateTo('screen-home');
         }
 
         function switchAdminTab(tabName) {
+            playSound('click');
             ['settings', 'questions', 'students', 'banned', 'results'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`).classList.add('hidden');
                 document.getElementById(`admin-tab-btn-${t}`).className = 'admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap';
@@ -958,6 +1118,7 @@
         }
 
         async function saveAdminSettings() {
+            playSound('click');
             DB.config.title = document.getElementById('admin-input-title').value.trim() || DB.config.title;
             DB.config.grade = document.getElementById('admin-input-grade').value.trim();
             DB.config.subject = document.getElementById('admin-input-subject').value.trim();
@@ -971,7 +1132,7 @@
             if (newPass) DB.config.adminPass = newPass;
 
             await saveDatabase();
-            showToast('تم حفظ التعديلات بنجاح سحابياً.', 'fa-check');
+            showToast('تم حفظ وتحديث الإعدادات بنجاح.', 'fa-cloud-arrow-up');
         }
 
         function handleQTypeChange() {
@@ -1009,6 +1170,7 @@
         }
 
         async function saveQuestion() {
+            playSound('click');
             const qId = document.getElementById('admin-q-id').value;
             const type = document.getElementById('admin-q-type').value;
             const text = document.getElementById('admin-q-text').value.trim();
@@ -1052,7 +1214,7 @@
             await saveDatabase();
             resetQuestionForm();
             renderAdminQuestions();
-            showToast('تم حفظ وتحديث السؤال بنجاح.', 'fa-check');
+            showToast('تم حفظ وتحديث السؤال سحابياً.', 'fa-cloud-arrow-up');
         }
 
         function editQuestion(id) {
@@ -1107,7 +1269,7 @@
                     <td class="p-2.5">${s.isBanned ? '<span class="text-red-400 font-bold">محظور</span>' : '<span class="text-emerald-400">نشط</span>'}</td>
                     <td class="p-2.5 flex gap-2">
                         <button onclick="toggleBanStudent('${s.id}')" class="text-xs ${s.isBanned ? 'text-emerald-400' : 'text-amber-400'}">${s.isBanned ? 'فك الحظر' : 'حظر'}</button>
-                        <button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400">حذف</button>
+                        <button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400 hover:underline">حذف</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1115,6 +1277,7 @@
         }
 
         async function addStudent() {
+            playSound('click');
             const name = document.getElementById('admin-new-student-name').value.trim();
             const pass = document.getElementById('admin-new-student-pass').value.trim();
             if (!name || !pass) {
@@ -1229,7 +1392,7 @@
             link.click();
         }
 
-        window.onload = initApp;
+        window.onload = fetchCloudData;
     </script>
 </body>
 </html>

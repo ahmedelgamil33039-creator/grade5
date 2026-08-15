@@ -43,6 +43,9 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55);
         }
+        .btn-3d:active {
+            transform: translateY(1px);
+        }
         .text-glow {
             text-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
         }
@@ -184,9 +187,11 @@
             </div>
         </section>
 
-        <!-- SCREEN 4: FULL ADMIN DASHBOARD -->
+        <!-- SCREEN 4: COMPLETE ADMIN DASHBOARD -->
         <section id="screen-admin" class="w-full space-y-6 hidden">
             <div class="glass-card rounded-3xl p-6 border border-purple-500/40 space-y-6">
+                
+                <!-- HEADER -->
                 <div class="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-purple-500/30">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 bg-purple-500/20 border border-purple-500/30 text-purple-300 rounded-2xl flex items-center justify-center text-xl flex-shrink-0">
@@ -206,10 +211,18 @@
 
                 <!-- ADMIN TABS -->
                 <div class="flex gap-2 overflow-x-auto pb-2 border-b border-purple-500/30 text-xs font-bold">
-                    <button onclick="switchAdminTab('settings')" id="admin-tab-btn-settings" class="admin-tab-btn px-4 py-2 rounded-xl bg-purple-600 text-white whitespace-nowrap">إدارة الاختبار</button>
-                    <button onclick="switchAdminTab('questions')" id="admin-tab-btn-questions" class="admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">إدارة الأسئلة</button>
-                    <button onclick="switchAdminTab('students')" id="admin-tab-btn-students" class="admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">إدارة الطلاب</button>
-                    <button onclick="switchAdminTab('results')" id="admin-tab-btn-results" class="admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">النتائج والتقارير</button>
+                    <button onclick="switchAdminTab('settings')" id="admin-tab-btn-settings" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-purple-600 text-white whitespace-nowrap">
+                        <i class="fa-solid fa-sliders ml-1"></i> إدارة الاختبار
+                    </button>
+                    <button onclick="switchAdminTab('questions')" id="admin-tab-btn-questions" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">
+                        <i class="fa-solid fa-file-circle-question ml-1"></i> إدارة الأسئلة
+                    </button>
+                    <button onclick="switchAdminTab('students')" id="admin-tab-btn-students" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">
+                        <i class="fa-solid fa-users ml-1"></i> إدارة الطلاب
+                    </button>
+                    <button onclick="switchAdminTab('results')" id="admin-tab-btn-results" class="admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap">
+                        <i class="fa-solid fa-square-poll-vertical ml-1"></i> النتائج والتقارير
+                    </button>
                 </div>
 
                 <!-- TAB 1: SETTINGS -->
@@ -331,7 +344,12 @@
 
                 <!-- TAB 4: RESULTS -->
                 <div id="admin-tab-results" class="admin-tab-content space-y-4 hidden text-right">
-                    <h4 class="font-bold text-sm text-purple-300">سجل نتائج طلاب الصف الخامس</h4>
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-sm text-purple-300">سجل نتائج طلاب الصف الخامس</h4>
+                        <button onclick="exportResultsCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition">
+                            <i class="fa-solid fa-file-excel ml-1"></i> تصدير Excel
+                        </button>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-right text-slate-300">
                             <thead class="bg-slate-900 border-b border-purple-500/30 text-purple-300">
@@ -444,16 +462,14 @@
         };
 
         function loadLocalData() {
-            const saved = localStorage.getItem('grade5_quiz_db');
+            const saved = localStorage.getItem('grade5_full_db');
             if (saved) {
-                try {
-                    DB = JSON.parse(saved);
-                } catch(e) {}
+                try { DB = JSON.parse(saved); } catch(e) {}
             }
         }
 
         function saveLocalData() {
-            localStorage.setItem('grade5_quiz_db', JSON.stringify(DB));
+            localStorage.setItem('grade5_full_db', JSON.stringify(DB));
         }
 
         let currentStudent = null;
@@ -635,7 +651,7 @@
             navigateTo('screen-result');
         }
 
-        // ADMIN PANEL
+        // --- ADMIN PANEL METHODS ---
         function openAdminModal() {
             document.getElementById('admin-passcode-input').value = '';
             document.getElementById('modal-admin-auth').classList.remove('hidden');
@@ -664,10 +680,10 @@
         function switchAdminTab(tabName) {
             ['settings', 'questions', 'students', 'results'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`).classList.add('hidden');
-                document.getElementById(`admin-tab-btn-${t}`).className = 'admin-tab-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap';
+                document.getElementById(`admin-tab-btn-${t}`).className = 'admin-tab-btn px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 whitespace-nowrap';
             });
             document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`admin-tab-btn-${tabName}`).className = 'admin-tab-btn px-4 py-2 rounded-xl bg-purple-600 text-white whitespace-nowrap';
+            document.getElementById(`admin-tab-btn-${tabName}`).className = 'admin-tab-btn px-4 py-2.5 rounded-xl bg-purple-600 text-white whitespace-nowrap';
         }
 
         function loadAdminData() {
@@ -787,7 +803,7 @@
                     <td class="p-2.5 font-mono">${s.id}</td>
                     <td class="p-2.5 font-bold text-white">${s.name}</td>
                     <td class="p-2.5 font-mono text-purple-300">${s.passcode}</td>
-                    <td class="p-2.5"><button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400">حذف</button></td>
+                    <td class="p-2.5"><button onclick="deleteStudent('${s.id}')" class="text-xs text-red-400 hover:underline">حذف</button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -838,6 +854,22 @@
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function exportResultsCSV() {
+            if (DB.results.length === 0) {
+                showToast('لا توجد نتائج للتصدير.', 'fa-circle-exclamation', true);
+                return;
+            }
+            let csv = "\uFEFFاسم الطالب,الدرجة,النسبة المئوية,التاريخ\n";
+            DB.results.forEach(r => {
+                csv += `"${r.name}","${r.score}","${r.percent}","${r.date}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `نتائج_الصف_الخامس_${Date.now()}.csv`;
+            link.click();
         }
 
         window.onload = initApp;

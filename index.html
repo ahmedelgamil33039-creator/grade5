@@ -1612,8 +1612,9 @@
             link.download = `نتائج_الصف_الخامس_${Date.now()}.csv`;
             link.click();
         }
+
 // ==========================================
-// نظام الخلط الفعلي للأسئلة الباقية في كل حالات المغادرة (بدون حظر)
+// نظام الخلط الفعلي والفوري للأسئلة الباقية بدون حظر
 // ==========================================
 let isHandlingAbsence = false;
 
@@ -1622,13 +1623,18 @@ function handleStudentAbsence() {
         isHandlingAbsence = true;
         
         if (activeAttempt.questions && activeAttempt.questions.length > activeAttempt.currentIndex) {
-            // فصل الأسئلة التي تم حلها عن الأسئلة الباقية، وخلط الأسئلة الباقية فعلياً
+            // 1. فصل الأسئلة التي تم حلها عن الأسئلة الباقية، وخلط الأسئلة الباقية فعلياً
             let answeredPart = activeAttempt.questions.slice(0, activeAttempt.currentIndex);
             let remainingPart = activeAttempt.questions.slice(activeAttempt.currentIndex);
             activeAttempt.questions = [...answeredPart, ...shuffleArray(remainingPart)];
+            
+            // 2. حفظ الحالة الجديدة فوراً في الذاكرة المؤقتة
             saveActiveAttemptState();
             
-            showToast('تنبيه: تم رصد مغادرتك، وتم خلط الأسئلة الباقية!', 'fa-shuffle', true);
+            // 3. الحركة المفقودة: تحديث الشاشة وعرض السؤال الجديد الخالي من التكرار فوراً أمام الطالب
+            renderCurrentQuestion();
+            
+            showToast('تنبيه: تم رصد مغادرتك، وتم خلط الأسئلة الباقية فعلياً!', 'fa-shuffle', true);
         }
         
         setTimeout(() => {
@@ -1644,12 +1650,12 @@ document.addEventListener("visibilitychange", function() {
     }
 });
 
-// 2. رصد تصغير المتصفح، أو الانتقال لتطبيق آخر (واتساب، شات جي بي تي، تليجرام، إلخ)
+// 2. رصد تصغير المتصفح، أو الانتقال لتطبيق آخر (واتساب، شات جي بي تي، إلخ)
 window.addEventListener("blur", function() {
     handleStudentAbsence();
 });
 
-// 3. الاستئناف الفعلي عند تحديث الصفحة (Refresh) مع خلط الأسئلة الباقية
+// 3. الاستئناف الفعلي عند تحديث الصفحة (Refresh) مع خلط الأسئلة الباقية وتحديث الشاشة
 const originalCheckActive = window.checkActiveResumeSession;
 window.checkActiveResumeSession = function() {
     const savedAttempt = localStorage.getItem('grade5_active_attempt');
@@ -1684,6 +1690,5 @@ window.onload = fetchCloudData;
 </script>
 </body>
 </html>
-
         
        

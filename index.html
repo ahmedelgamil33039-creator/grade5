@@ -1612,7 +1612,14 @@
             link.download = `نتائج_الصف_الخامس_${Date.now()}.csv`;
             link.click();
         }
-
+// نظام إعادة خلط الأسئلة تلقائياً لو الطالب خرج أو فتح تبويب تاني
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden && activeAttempt && !activeAttempt.isCompleted && !isPreviewMode) {
+        activeAttempt.questions = shuffleArray(activeAttempt.questions);
+        saveActiveAttemptState();
+        showToast('تنبيه: تم رصد مغادرتك للصفحة، وتم إعادة ترتيب أسئلة الاختبار عشوائياً!', 'fa-shield-halved', true);
+    }
+});
         window.onload = fetchCloudData;
     </script>
 </body>

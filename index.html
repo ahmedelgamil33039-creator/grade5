@@ -1612,27 +1612,68 @@
             link.download = `نتائج_الصف_الخامس_${Date.now()}.csv`;
             link.click();
         }
-// // نظام أمني صارم: تسليم الاختبار فوراً وحظر الطالب عند محاولة مغادرة التبويب للغش
+// ==========================================
+// نظام الحماية الكامل (ضد الـ Refresh والغش)
+// ==========================================
 let hasCheated = false;
-document.addEventListener("visibilitychange", function() {
-    if (document.hidden && activeAttempt && !activeAttempt.isCompleted && !isPreviewMode && !hasCheated) {
+
+function triggerAntiCheat() {
+    if (activeAttempt && !activeAttempt.isCompleted && !isPreviewMode && !hasCheated) {
         hasCheated = true;
-        showToast('تم رصد محاولة مغادرة صفحة الاختبار للغش! يتم إنهاء الاختبار الآن.', 'fa-ban', true);
+        showToast('تم رصد محاولة مغادرة صفحة الاختبار! يتم إنهاء الاختبار الآن.', 'fa-ban', true);
         
-        // تسجيل سبب الحظر وحفظ النتيجة الحالية وتسليم الامتحان
         setTimeout(() => {
             if (currentStudent) {
                 const targetStudent = DB.students.find(s => s.id === currentStudent.id);
                 if (targetStudent) {
                     targetStudent.isBanned = true;
-                    targetStudent.banReason = 'مخالفة تعليمات الاختبار (مغادرة التبويب للغش)';
+                    targetStudent.banReason = 'مخالفة تعليمات الاختبار (محاولة غش/تحديث)';
                     targetStudent.banTime = new Date().toLocaleString('ar-EG');
                 }
             }
             finishQuiz(false);
         }, 1000);
     }
+}
+
+// 1. رصد الخروج للكمبيوتر والموبايل
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden) triggerAntiCheat();
 });
+window.addEventListener("blur", function() {
+    triggerAntiCheat();
+});
+
+// 2. تعديل دالة الاستئناف عشان لما يعمل Refresh تتلخبط الأسئلة وميرجعش لنفس السؤال الثابت
+const originalCheckActive = window.checkActiveResumeSession;
+window.checkActiveResumeSession = function() {
+    const savedAttempt = localStorage.getItem('grade5_active_attempt');
+    if (savedAttempt) {
+        try {
+            const parsed = JSON.parse(savedAttempt);
+            if (parsed && !parsed.isCompleted && parsed.timeRemaining > 0 && parsed.questions && parsed.questions.length > 0) {
+                activeAttempt = parsed;
+                currentStudent = DB.students.find(s => s.id === activeAttempt.studentId) || { id: activeAttempt.studentId, name: activeAttempt.studentName };
+                
+                // الحركة السحرية: إعادة خلط الأسئلة المتبقية عشوائياً فوراً لمنع العودة لنفس السؤال القديم
+                if (activeAttempt.questions && activeAttempt.questions.length > activeAttempt.currentIndex) {
+                    let answeredPart = activeAttempt.questions.slice(0, activeAttempt.currentIndex);
+                    let remainingPart = activeAttempt.questions.slice(activeAttempt.currentIndex);
+                    activeAttempt.questions = [...answeredPart, ...shuffleArray(remainingPart)];
+                }
+                
+                document.getElementById('quiz-header-teacher').innerText = DB.config.teacherName;
+                document.getElementById('quiz-header-student').innerText = currentStudent.name;
+
+                navigateTo('screen-quiz');
+                renderCurrentQuestion();
+                startQuizTimer();
+                showToast('تنبيه: تم إعادة ترتيب الأسئلة الباقية نظراً لتحديث الصفحة!', 'fa-shuffle', true);
+                return;
+            }
+        } catch(e) {}
+    }
+};
         window.onload = fetchCloudData;
     </script>
 </body>

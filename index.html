@@ -1612,12 +1612,25 @@
             link.download = `نتائج_الصف_الخامس_${Date.now()}.csv`;
             link.click();
         }
-// نظام إعادة خلط الأسئلة تلقائياً لو الطالب خرج أو فتح تبويب تاني
+// // نظام أمني صارم: تسليم الاختبار فوراً وحظر الطالب عند محاولة مغادرة التبويب للغش
+let hasCheated = false;
 document.addEventListener("visibilitychange", function() {
-    if (document.hidden && activeAttempt && !activeAttempt.isCompleted && !isPreviewMode) {
-        activeAttempt.questions = shuffleArray(activeAttempt.questions);
-        saveActiveAttemptState();
-        showToast('تنبيه: تم رصد مغادرتك للصفحة، وتم إعادة ترتيب أسئلة الاختبار عشوائياً!', 'fa-shield-halved', true);
+    if (document.hidden && activeAttempt && !activeAttempt.isCompleted && !isPreviewMode && !hasCheated) {
+        hasCheated = true;
+        showToast('تم رصد محاولة مغادرة صفحة الاختبار للغش! يتم إنهاء الاختبار الآن.', 'fa-ban', true);
+        
+        // تسجيل سبب الحظر وحفظ النتيجة الحالية وتسليم الامتحان
+        setTimeout(() => {
+            if (currentStudent) {
+                const targetStudent = DB.students.find(s => s.id === currentStudent.id);
+                if (targetStudent) {
+                    targetStudent.isBanned = true;
+                    targetStudent.banReason = 'مخالفة تعليمات الاختبار (مغادرة التبويب للغش)';
+                    targetStudent.banTime = new Date().toLocaleString('ar-EG');
+                }
+            }
+            finishQuiz(false);
+        }, 1000);
     }
 });
         window.onload = fetchCloudData;
